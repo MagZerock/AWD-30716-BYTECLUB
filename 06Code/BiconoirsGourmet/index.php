@@ -16,7 +16,8 @@
                 <a href="views/reservationForm.php" class="btn-reserva">RESERVATIONS</a>
                 <a href="#">ABOUT US</a>
                 <a href="#">LOCATIONS</a>
-                <a href="views/registerForm.php">LOG IN</a>
+                <a href="views/registerForm.php">SIGN UP</a>
+				<a href="views/loginForm.php">LOG IN</a>
                 <a href="views/satisfactionForm.php">SATISFACTION SURVEYS</a>
             </nav>
         </header>

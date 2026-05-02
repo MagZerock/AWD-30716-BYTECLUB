@@ -15,7 +15,8 @@
         <a href="menu.php">MENU</a>
         <a href="#">ABOUT US</a>
         <a href="#">LOCATIONS</a>
-        <a href="registerForm.php">LOG IN</a>
+        <a href="registerForm.php">SIGN UP</a>
+		<a href="loginForm.php">LOG IN</a>
         <a href="reservationForm.php">RESERVATIONS</a>
         <a href="satisfactionForm.php">SATISFACTION SURVEYS</a>
     </nav>
