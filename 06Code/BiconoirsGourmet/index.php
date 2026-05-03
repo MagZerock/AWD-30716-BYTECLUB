@@ -9,25 +9,30 @@
     <div class="main-container">
         
         <header>
-            <div class="logo">LOGO</div>
+            <div class="logo">
+                <a href="index.php">
+                    <img src="public/img/logoRestaurantGreen.png" alt="Logo Biconoir's" class="logo-img">
+                </a>
+            </div>
             <nav>
-                <a href="index.php">HOME</a>
-                <a href="views/menu.php">MENU</a>
-                <a href="views/reservationForm.php" class="btn-reserva">RESERVATIONS</a>
-                <a href="#">ABOUT US</a>
-                <a href="#">LOCATIONS</a>
-                <a href="views/registerForm.php">SIGN UP</a>
-				<a href="views/loginForm.php">LOG IN</a>
-                <a href="views/satisfactionForm.php">SATISFACTION SURVEYS</a>
+                <a href="index.php">Inicio</a>
+                <a href="views/menu.php">Ver menú</a>
+                <a href="views/reservationForm.php" class="btn-reserva">Reservaciones</a>
+                <a href="#">Acerca de nosotros</a>
+                <a href="#">Encuentranos</a>
+                <a href="views/satisfactionForm.php">Encuestas de satisfacción</a>
+                <a href="views/registerForm.php">Registrate</a>
+				<a href="views/loginForm.php">Iniciar sesión</a>
+                
             </nav>
         </header>
 
         <section class="hero">
             <div class="hero-content">
-                <h1>WELCOME TO BICONOIRS GOURMET</h1>
+                <h1>TE DAMOS LA BIENVENIDA A BICONOIR'S</h1>
                 <div class="hero-buttons">
-                    <a href="views/reservationForm.php">RESERVATIONS</a>
-                    <a href="views/menu.php">CHECK OUR MENU</a>
+                    <a href="views/reservationForm.php">RESERVAR</a>
+                    <a href="views/menu.php">VER NUESTRO MENÚ</a>
                 </div>
             </div>
         </section>
