@@ -23,7 +23,6 @@
                 <a href="views/satisfactionForm.php">Encuestas de satisfacción</a>
                 <a href="views/registerForm.php">Registrate</a>
 				<a href="views/loginForm.php">Iniciar sesión</a>
-                
             </nav>
         </header>
 
