@@ -6,8 +6,8 @@ class User {
 
     public static function getAll() {
         if (!file_exists(self::$file)) {
-            // Usuarios por defecto si el archivo no existe
-            $defaults = [
+
+        $defaults = [
                 ['name' => 'Admin', 'email' => 'admin@biconoir.com', 'password' => 'admin123', 'role' => 'admin'],
                 ['name' => 'Cliente Ejemplo', 'email' => 'customer@example.com', 'password' => 'customer123', 'role' => 'customer']
             ];

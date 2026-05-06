@@ -30,15 +30,12 @@
     </div>
 </section>
 
-<!-- Modal de Personalización -->
 <div id="modal_personalize" class="modal-personalize">
     <div class="bg-white rounded-[3.5rem] p-10 md:p-12 max-w-4xl w-full shadow-2xl relative border border-gray-100 overflow-hidden">
-        <!-- Decoración -->
         <div class="absolute top-0 left-0 w-full h-2 bg-[#1a4731]"></div>
         <button onclick="closePersonalizeModal()" class="absolute top-8 right-8 text-gray-300 hover:text-red-500 text-3xl transition">✕</button>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <!-- Columna Visual -->
             <div>
                 <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl mb-8 group">
                     <img id="modal_img" src="" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
@@ -49,14 +46,12 @@
                 <p id="modal_desc" class="text-gray-400 italic leading-relaxed text-sm"></p>
             </div>
 
-            <!-- Columna Formulario -->
             <form action="index.php?action=add_to_cart" method="POST" class="space-y-8">
                 <input type="hidden" name="id" id="modal_id">
                 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 ml-1">Personaliza tus ingredientes:</label>
                     <div id="ingredients_list" class="grid grid-cols-2 gap-3 bg-gray-50 p-6 rounded-[2rem] border border-gray-100 max-h-60 overflow-y-auto">
-                        <!-- JS populated -->
                     </div>
                 </div>
 

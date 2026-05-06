@@ -6,8 +6,8 @@ class Dish {
 
     public static function getAll() {
         if (!file_exists(self::$file)) {
-            // Initial mock data
-            $initial = [
+
+        $initial = [
                 ['id' => 1, 'name' => 'Hamburguesa Biconoir', 'description' => 'Carne premium y queso cheddar.', 'price' => 12.50, 'image' => 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=500'],
                 ['id' => 2, 'name' => 'Ensalada Green', 'description' => 'Mix de lechugas y aguacate.', 'price' => 8.90, 'image' => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=500']
             ];
@@ -19,7 +19,7 @@ class Dish {
 
     public static function add($data) {
         $dishes = self::getAll();
-        $data['id'] = time(); // Simple unique ID
+        $data['id'] = time();
         $dishes[] = $data;
         file_put_contents(self::$file, json_encode($dishes));
     }

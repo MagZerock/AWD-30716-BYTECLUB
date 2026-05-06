@@ -29,7 +29,7 @@ class AdminController {
                 'description' => $_POST['description'],
                 'price' => (float)$_POST['price'],
                 'image' => $_POST['image'],
-                'ingredients' => [] // Por ahora vacío al añadir nuevo, se puede mejorar
+                'ingredients' => [] 
             ];
             Dish::add($data);
         }

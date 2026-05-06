@@ -30,7 +30,7 @@ class AuthController {
                 'password' => $_POST['password'],
                 'role' => 'customer'
             ]);
-            // Autologin after register
+
             $_SESSION['user'] = [
                 'name' => $_POST['name'],
                 'role' => 'customer'

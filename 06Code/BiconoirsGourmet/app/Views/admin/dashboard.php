@@ -11,7 +11,6 @@
 </head>
 <body class="bg-gray-50 flex min-h-screen">
 
-    <!-- Sidebar -->
     <aside class="w-80 bg-[#1a4731] text-white flex flex-col sticky top-0 h-screen shadow-2xl">
         <div class="p-10 border-b border-green-800 text-center">
             <h1 class="text-3xl font-bold tracking-tighter">BICONOIR</h1>
@@ -40,7 +39,6 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
     <main class="flex-grow p-12 overflow-y-auto">
         <div class="flex justify-between items-end mb-12">
             <div>
@@ -76,9 +74,7 @@
                 </div>
             </section>
 
-            <!-- Sidebar Info -->
             <div class="space-y-10">
-                <!-- Reservations -->
                 <section class="bg-white rounded-[3rem] shadow-2xl p-8 border border-gray-100">
                     <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
                         <span class="mr-3 text-2xl">📅</span> Reservas
@@ -93,7 +89,6 @@
                     </div>
                 </section>
 
-                <!-- Feedback -->
                 <section class="bg-white rounded-[3rem] shadow-2xl p-8 border border-gray-100">
                     <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
                         <span class="mr-3 text-2xl">⭐</span> Reseñas
@@ -113,8 +108,7 @@
             </div>
         </div>
 
-        <!-- Orders Management -->
-        <section class="mt-12 bg-white rounded-[3rem] shadow-2xl p-10 border border-gray-100">
+¡        <section class="mt-12 bg-white rounded-[3rem] shadow-2xl p-10 border border-gray-100">
             <h3 class="text-2xl font-bold text-gray-800 mb-8 flex items-center">
                 <span class="mr-3">🛍️</span> Gestión de Pedidos Activos
             </h3>
@@ -172,7 +166,6 @@
         </section>
     </main>
 
-    <!-- Modal ADD -->
     <div id="modal_add" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[100] flex items-center justify-center p-6">
         <div class="bg-white rounded-[3rem] p-12 max-w-md w-full shadow-2xl relative">
             <button onclick="document.getElementById('modal_add').classList.add('hidden')" class="absolute top-6 right-6 text-gray-300 hover:text-red-500">✕</button>
@@ -187,7 +180,6 @@
         </div>
     </div>
 
-    <!-- Modal EDIT -->
     <div id="modal_edit" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[100] flex items-center justify-center p-6">
         <div class="bg-white rounded-[3rem] p-12 max-w-md w-full shadow-2xl relative">
             <button onclick="document.getElementById('modal_edit').classList.add('hidden')" class="absolute top-6 right-6 text-gray-300 hover:text-red-500">✕</button>
