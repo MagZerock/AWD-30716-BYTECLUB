@@ -1,3 +1,4 @@
+<?php require_once "../backend/dishes.php"; ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,94 +19,105 @@
                 </a>
             </div>
             <nav>
-                <a href="../index.php">Inicio</a>
                 <a href="menu.php">Ver menú</a>
                 <a href="reservationForm.php" class="btn-reserva">Reservaciones</a>
-                <a href="#">Acerca de nosotros</a>
-                <a href="#">Encuentranos</a>
+                <a href="locations.php">Encuentranos</a>
                 <a href="satisfactionForm.php">Encuestas de satisfacción</a>
                 <a href="registerForm.php">Registrate</a>
                 <a href="loginForm.php">Iniciar sesión</a>
             </nav>
         </header>
 
-        <h1 class="page-title">Our Menu</h1>
+        <h1 class="page-title">Nuestro Menú</h1>
 
         <section class="menu-section">
-            <h2 class="section-title">Entrance</h2>
+            <h2 class="section-title">Entrada</h2>
             <div class="dishes-grid">
-                
-                <article class="dish-card">
-                    <div class="dish-header">
-                        <span>Name Product</span>
-                        <span class="dish-price">Price</span>
-                    </div>
-                    <p class="dish-description">Description</p>
-                </article>
 
-                <article class="dish-card">
-                    <div class="dish-header">
-                        <span>Name Product</span>
-                        <span class="dish-price">Price</span>
-                    </div>
-                    <p class="dish-description">Description</p>
-                </article>
+                <?php foreach($dishes as $dish): ?>
+                    <?php if($dish['category'] == "Entrance"): ?>
 
-            </div>
+                        <article class="dish-card">
+                            
+                            <img src="<?= $dish['img'] ?>" class="dish-img">
+
+                            <div class="dish-content">
+                                <div class="dish-header">
+                                    <span><?= $dish['name'] ?></span>
+                                    <span class="dish-price">$<?= $dish['price'] ?></span>
+                                </div>
+
+                                <p class="dish-description">
+                                    <?= $dish['desc'] ?>
+                                </p>
+                            </div>
+
+                        </article>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                </div>
         </section>
 
         <section class="menu-section">
-            <h2 class="section-title">Main dishes</h2>
+            <h2 class="section-title">Platos principales</h2>
             <div class="dishes-grid">
-                
-                <article class="dish-card">
-                    <div class="dish-header">
-                        <span>Name Product</span>
-                        <span class="dish-price">Price</span>
-                    </div>
-                    <p class="dish-description">Description</p>
-                </article>
 
-                <article class="dish-card">
-                    <div class="dish-header">
-                        <span>Name Product</span>
-                        <span class="dish-price">Price</span>
-                    </div>
-                    <p class="dish-description">Description</p>
-                </article>
+                <?php foreach($dishes as $dish): ?>
+                    <?php if($dish['category'] == "Main dishes"): ?>
 
-                <article class="dish-card">
-                    <div class="dish-header">
-                        <span>Name Product</span>
-                        <span class="dish-price">Price</span>
-                    </div>
-                    <p class="dish-description">Description</p>
-                </article>
+                        <article class="dish-card">
+                            
+                            <img src="<?= $dish['img'] ?>" class="dish-img">
 
-            </div>
+                            <div class="dish-content">
+                                <div class="dish-header">
+                                    <span><?= $dish['name'] ?></span>
+                                    <span class="dish-price">$<?= $dish['price'] ?></span>
+                                </div>
+
+                                <p class="dish-description">
+                                    <?= $dish['desc'] ?>
+                                </p>
+                            </div>
+
+                        </article>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                </div>
         </section>
 
         <section class="menu-section">
             <h2 class="section-title">Drinks</h2>
             <div class="dishes-grid">
-                
-                <article class="dish-card">
-                    <div class="dish-header">
-                        <span>Name Product</span>
-                        <span class="dish-price">Price</span>
-                    </div>
-                    <p class="dish-description">Description</p>
-                </article>
 
-                <article class="dish-card">
-                    <div class="dish-header">
-                        <span>Name Product</span>
-                        <span class="dish-price">Price</span>
-                    </div>
-                    <p class="dish-description">Description</p>
-                </article>
+                <?php foreach($dishes as $dish): ?>
+                    <?php if($dish['category'] == "Drinks"): ?>
 
-            </div>
+                        <article class="dish-card">
+                            
+                            <img src="<?= $dish['img'] ?>" class="dish-img">
+
+                            <div class="dish-content">
+                                <div class="dish-header">
+                                    <span><?= $dish['name'] ?></span>
+                                    <span class="dish-price">$<?= $dish['price'] ?></span>
+                                </div>
+
+                                <p class="dish-description">
+                                    <?= $dish['desc'] ?>
+                                </p>
+                            </div>
+
+                        </article>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                </div>
         </section>
 
     </div>

@@ -17,11 +17,9 @@
         </a>
     </div>
     <nav>
-        <a href="../index.php">Inicio</a>
         <a href="menu.php">Ver menú</a>
         <a href="reservationForm.php" class="btn-reserva">Reservaciones</a>
-        <a href="#">Acerca de nosotros</a>
-        <a href="#">Encuentranos</a>
+        <a href="locations.php">Encuentranos</a>
         <a href="satisfactionForm.php">Encuestas de satisfacción</a>
         <a href="registerForm.php">Registrate</a>
 		<a href="loginForm.php">Iniciar sesión</a>
@@ -35,15 +33,15 @@
         <form id="loginForm" onsubmit="validateAndSubmitLogin(event)">
             
             <fieldset class="form-section">
-                <legend>ACCESS DATA</legend>
+                <legend>Acceder</legend>
 
                 <div class="form-group">
-                    <label>Email or Username:</label>
+                    <label>Email o usuario:</label>
                     <input type="text" name="user_identifier" id="user_identifier" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Password:</label>
+                    <label>Contraseña:</label>
                     <input type="password" name="password" id="password" required>
                 </div>
 
@@ -55,12 +53,12 @@
                 <input type="submit" value="Log In" class="btn btn-primary">
 
                 <button type="button" onclick="window.history.back()" class="btn btn-danger">
-                    Cancel
+                    Cancelar
                 </button>
             </div>
 
             <div class="form-group" style="margin-top: 10px;">
-                <a href="#">Forgot your password?</a>
+                <a href="registerForm.php">¿No estas registrado?</a>
             </div>
 
         </form>
