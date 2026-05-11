@@ -9,7 +9,7 @@ class AuthController {
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            $user = User::find($email, $password);
+            $user = User::authenticate($email, $password);
 
             if ($user) {
                 $_SESSION['user'] = $user;
@@ -24,7 +24,7 @@ class AuthController {
 
     public function register() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            User::add([
+            $userId = User::add([
                 'name' => $_POST['name'],
                 'email' => $_POST['email'],
                 'password' => $_POST['password'],
@@ -32,7 +32,9 @@ class AuthController {
             ]);
 
             $_SESSION['user'] = [
+                'user_id' => $userId,
                 'name' => $_POST['name'],
+                'email' => $_POST['email'],
                 'role' => 'customer'
             ];
             header('Location: index.php?action=home');

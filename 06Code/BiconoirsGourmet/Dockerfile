@@ -1,23 +1,35 @@
 FROM php:8.2-apache
 
-# Habilitar el módulo de reescritura de Apache para las rutas del MVC
-RUN a2enmod rewrite
+# 1. Instalación de dependencias del sistema y extensiones de PHP
+RUN apt-get update && apt-get install -y \
+    unzip \
+    git \
+    libpq-dev \
+    libzip-dev \
+    && docker-php-ext-install pdo pdo_pgsql zip \
+    && a2enmod rewrite
 
-# Copiar los archivos del proyecto al contenedor
+# 2. Instalación de Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+# 3. Copiar archivos y ejecutar Composer
 COPY . /var/www/html/
 
-# Configurar permisos para la carpeta de base de datos (JSON)
-# Esto es vital para que puedas guardar pedidos, usuarios y platos
-RUN chown -R www-data:www-data /var/www/html/app/database && chmod -R 775 /var/www/html/app/database
+# Ajuste de permisos antes de instalar dependencias
+RUN chown -R www-data:www-data /var/www/html
 
-# Cambiar el DocumentRoot de Apache para que apunte a la carpeta /public
-# De esta forma el index.php de la raíz será ignorado y se usará el de /public
+USER www-data
+RUN composer install --no-interaction --optimize-autoloader --no-dev
+USER root
+
+# 4. Configuración de Apache
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Instalar extensiones necesarias de PHP si en el futuro usas MySQL
-# RUN docker-php-ext-install pdo pdo_mysql
+# Asegurar permisos en carpetas de caché/logs si usas frameworks como Slim o Laravel
+RUN chmod -R 775 /var/www/html/storage 2>/dev/null || true
 
-# Exponer el puerto 80
 EXPOSE 80
