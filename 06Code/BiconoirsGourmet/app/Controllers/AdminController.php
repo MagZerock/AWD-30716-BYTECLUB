@@ -16,7 +16,6 @@ class AdminController {
         $dishes = Dish::getAll();
         $reservations = Reservation::getAll();
         
-        // Lógica de filtrado de pedidos
         $orderDate = $_GET['order_date'] ?? date('Y-m-d');
         $query = Order::with(['details.menuItem']);
 
