@@ -1,46 +1,69 @@
-// Follow this setup guide to integrate the Deno language server with your editor:
-// https://deno.land/manual/getting_started/setup_your_environment
-// This enables autocomplete, go to definition, etc.
+import { Hono } from 'https://deno.land/x/hono@v3.4.1/mod.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+import { Database } from '../_shared/types/supabase.ts'
 
-// Setup type definitions for built-in Supabase Runtime APIs
-import "@supabase/functions-js/edge-runtime.d.ts";
-import { withSupabase } from "@supabase/server";
+const supabase = createClient<Database>(
+  Deno.env.get('SUPABASE_URL')!,
+  Deno.env.get('SUPABASE_ANON_KEY')!
+)
 
-console.log("Hello from Functions!");
+const app = new Hono()
 
-// This endpoint uses 'publishable' | 'secret' access, apiKey is required.
-// Use publishable for Client-facing, key-validated endpoints
-// Use secret for Server-to-server, internal calls
-export default {
-  fetch: withSupabase({ auth: ["publishable", "secret"] }, async (req, ctx) => {
-    // Called by another service with a secret key
-    // ctx.supabaseAdmin bypasses RLS — use for privileged operations
-    /*
-    if (ctx.authMode === "secret") {
-      const { user_id } = await req.json();
-      const { data } = await ctx.supabaseAdmin.auth.admin.getUserById(user_id);
+app.basePath('/menu')
 
-      return Response.json({
-        email: data?.user?.email,
-      });
-    }
-    */
+app.get('/dishes', async (c) => {
+  const category = c.req.query('category')
+  const search = c.req.query('search')
 
-    const { name } = await req.json();
+  let query = supabase.from('menu_items').select('*')
 
-    return Response.json({
-      message: `Hello ${name}!`,
-    });
-  }),
-};
+  if (category) {
+    query = (query as any).eq('category', category)
+  }
 
-/* To invoke locally:
+  if (search) {
+    query = query.ilike('name', `%${search}%`)
+  }
 
-  1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
-  2. Make an HTTP request:
+  const { data } = await query
 
-  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/menu-management' \
-    --header 'apiKey: sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH' \
-    --data '{"name":"Functions"}'
+  return c.json(data ?? [], 200)
+})
 
-*/
+app.get('/dishes/:dishId', async (c) => {
+  const dishId = c.req.param('dishId')
+
+  const { data, error } = await supabase
+    .from('menu_items')
+    .select('*')
+    .eq('item_id', dishId)
+    .single()
+
+  if (error || !data) {
+    return c.json({ error: 'Dish not found' }, 404)
+  }
+
+  return c.json(data, 200)
+})
+
+app.get('/categories', async (c) => {
+  const { data } = await supabase.from('menu_items').select('*')
+
+  const categories = [
+    ...new Set(
+      (data ?? [])
+        .map((item) => (item as any).category)
+        .filter((cat): cat is string => typeof cat === 'string')
+    ),
+  ]
+
+  return c.json(categories, 200)
+})
+
+app.get('/ingredients', async (c) => {
+  const { data } = await supabase.from('ingredients').select('*')
+
+  return c.json(data ?? [], 200)
+})
+
+export default app
