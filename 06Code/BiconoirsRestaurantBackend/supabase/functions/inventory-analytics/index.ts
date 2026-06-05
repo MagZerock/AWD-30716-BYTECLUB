@@ -5,8 +5,8 @@ const app = new Hono().basePath('/inventory-analytics')
 
 app.use('*', async (c, next) => {
   const supabase = createClient(
-    Deno.env.get('MI_SUPABASE_URL') ?? '',
-    Deno.env.get('MI_SUPABASE_ANON_KEY') ?? '',
+    Deno.env.get('REAL_URL') ?? '',
+    Deno.env.get('REAL_KEY') ?? '',
     { global: { headers: { Authorization: c.req.header('Authorization') || '' } } }
   )
   
