@@ -1,8 +1,10 @@
-import { Body, Controller, Get, HttpCode, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, Param, Post, UseGuards } from "@nestjs/common";
 import { SurveysService } from "./surveys.service";
 import { SubmitSurveyDto } from "./dto/submit-survey.dto";
+import { AuthGuard } from "../auth/auth.guard";
 
 @Controller("surveys")
+@UseGuards(AuthGuard)
 export class SurveysController {
   constructor(private readonly surveysService: SurveysService) {}
 

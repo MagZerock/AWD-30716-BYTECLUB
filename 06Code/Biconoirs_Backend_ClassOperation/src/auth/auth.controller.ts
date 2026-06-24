@@ -1,10 +1,11 @@
-import { Controller, Post, Get, Body, Param, Headers } from "@nestjs/common";
+import { Controller, Post, Get, Body, Param, Headers, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
 import { RefreshDto } from "./dto/refresh.dto";
 import { ForgotPasswordDto } from "./dto/forgot-password.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
+import { AuthGuard } from "./auth.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -31,6 +32,7 @@ export class AuthController {
   }
 
   @Get("me")
+  @UseGuards(AuthGuard)
   getMe(@Headers("x-user-id") userId: string) {
     return this.authService.getMe(userId);
   }
@@ -45,3 +47,4 @@ export class AuthController {
     return this.authService.resetPassword(dto);
   }
 }
+
