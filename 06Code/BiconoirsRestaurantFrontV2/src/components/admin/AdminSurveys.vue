@@ -25,12 +25,18 @@
 
 <script setup lang="ts">
 import { useAdminStore } from '@stores/adminStore';
+import { useToast } from '../../composables/useToast';
 import { formatDate } from '@utils/formatters';
 
 const adminStore = useAdminStore();
+const toast = useToast();
 
 const loadSurveys = async () => {
   await adminStore.fetchSurveys();
+  if (adminStore.error) {
+    toast.error(adminStore.error);
+    adminStore.error = null;
+  }
 };
 </script>
 

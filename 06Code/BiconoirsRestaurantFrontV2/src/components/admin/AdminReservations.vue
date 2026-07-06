@@ -44,13 +44,19 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAdminStore } from '@stores/adminStore';
+import { useToast } from '../../composables/useToast';
 import { formatDate } from '@utils/formatters';
 
 const adminStore = useAdminStore();
+const toast = useToast();
 const selectedStatus = ref('');
 
 const loadReservations = async () => {
   await adminStore.fetchAllReservations(selectedStatus.value);
+  if (adminStore.error) {
+    toast.error(adminStore.error);
+    adminStore.error = null;
+  }
 };
 </script>
 

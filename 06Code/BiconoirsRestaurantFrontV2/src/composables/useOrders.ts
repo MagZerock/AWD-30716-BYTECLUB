@@ -2,7 +2,7 @@
 
 import { ref } from 'vue';
 import apiClient from '../utils/api';
-import { Order } from '@types/index';
+import { Order } from '@/types/index';
 
 export const useOrders = () => {
   const orders = ref<Order[]>([]);

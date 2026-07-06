@@ -3,7 +3,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import apiClient from '../utils/api';
-import { Order, Reservation, Survey } from '@types/index';
+import { Order, Reservation, Survey } from '@/types/index';
 
 interface DashboardStats {
   totalOrders: number;
@@ -85,6 +85,7 @@ export const useAdminStore = defineStore('admin', () => {
   };
 
   const updateOrderStatus = async (orderId: string, status: string) => {
+    error.value = null;
     try {
       const response = await apiClient.put<{
         success: boolean;

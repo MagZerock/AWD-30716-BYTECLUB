@@ -60,17 +60,29 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAdminStore } from '@stores/adminStore';
+import { useToast } from '../../composables/useToast';
 import { formatPrice, formatDate } from '@utils/formatters';
 
 const adminStore = useAdminStore();
+const toast = useToast();
 const selectedStatus = ref('');
 
 const loadOrders = async () => {
   await adminStore.fetchAllOrders(selectedStatus.value);
+  if (adminStore.error) {
+    toast.error(adminStore.error);
+    adminStore.error = null;
+  }
 };
 
 const updateStatus = async (orderId: string, status: string) => {
-  await adminStore.updateOrderStatus(orderId, status);
+  const success = await adminStore.updateOrderStatus(orderId, status);
+  if (success) {
+    toast.success('Estado actualizado');
+  } else if (adminStore.error) {
+    toast.error(adminStore.error);
+    adminStore.error = null;
+  }
 };
 </script>
 

@@ -3,7 +3,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import apiClient from '../utils/api';
-import { User, AuthResponse } from '@types/index';
+import { User, AuthResponse } from '@/types/index';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null);
@@ -29,11 +29,11 @@ export const useUserStore = defineStore('user', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/login', {
+      const response = await apiClient.post<{ success: boolean; data: AuthResponse }>('/auth/login', {
         email,
         password
       });
-      const { token: newToken, user: newUser } = response.data.data!;
+      const { token: newToken, user: newUser } = response.data.data;
       setToken(newToken);
       user.value = newUser;
       return true;
@@ -54,13 +54,13 @@ export const useUserStore = defineStore('user', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/register', {
+      const response = await apiClient.post<{ success: boolean; data: AuthResponse }>('/auth/register', {
         name,
         email,
-        passwordHash: password,
+        password: password,
         phone
       });
-      const { token: newToken, user: newUser } = response.data.data!;
+      const { token: newToken, user: newUser } = response.data.data;
       setToken(newToken);
       user.value = newUser;
       return true;

@@ -1,6 +1,7 @@
 // src/router/index.ts
 
 import { createRouter, createWebHistory } from 'vue-router';
+import { defineAsyncComponent } from 'vue';
 import { useUserStore } from '@stores/userStore';
 import MainLayout from '@components/layouts/MainLayout.vue';
 import Home from '@components/Home.vue';
@@ -12,7 +13,10 @@ import Orders from '@components/Orders.vue';
 import Reservations from '@components/Reservations.vue';
 import About from '@components/About.vue';
 import Survey from '@components/Survey.vue';
-import Dashboard from '@components/admin/Dashboard.vue';
+
+const Dashboard = defineAsyncComponent(
+  () => import('@components/admin/Dashboard.vue')
+);
 
 const routes = [
   {
@@ -82,7 +86,7 @@ const router = createRouter({
 });
 
 // Route guards
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   const userStore = useUserStore();
 
   if (to.meta.requiresAuth && !userStore.isAuthenticated) {

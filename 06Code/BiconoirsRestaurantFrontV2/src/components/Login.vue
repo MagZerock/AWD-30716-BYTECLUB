@@ -28,10 +28,6 @@
           />
         </div>
 
-        <div v-if="userStore.error" class="error-message">
-          {{ userStore.error }}
-        </div>
-
         <button
           type="submit"
           :disabled="userStore.isLoading"
@@ -52,16 +48,36 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../stores/userStore';
+import { useToast } from '../composables/useToast';
+import { validateEmail, validatePassword } from '../utils/validators';
 
 const email = ref('');
 const password = ref('');
 const userStore = useUserStore();
 const router = useRouter();
+const toast = useToast();
 
 const handleLogin = async () => {
+  if (!email.value || !password.value) {
+    toast.error('Todos los campos son obligatorios');
+    return;
+  }
+  if (!validateEmail(email.value)) {
+    toast.error('El correo electrónico no es válido');
+    return;
+  }
+  if (!validatePassword(password.value)) {
+    toast.error('La contraseña debe tener al menos 6 caracteres');
+    return;
+  }
+
   const success = await userStore.login(email.value, password.value);
   if (success) {
+    toast.success('Inicio de sesión exitoso');
     router.push('/');
+  } else if (userStore.error) {
+    toast.error(userStore.error);
+    userStore.error = null;
   }
 };
 </script>

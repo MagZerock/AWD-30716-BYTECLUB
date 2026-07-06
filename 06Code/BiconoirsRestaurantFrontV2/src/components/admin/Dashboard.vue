@@ -81,6 +81,7 @@
 import { ref, onMounted } from 'vue';
 import { useAdminStore } from '@stores/adminStore';
 import { useUserStore } from '@stores/userStore';
+import { useToast } from '../../composables/useToast';
 import { formatPrice } from '@utils/formatters';
 import AdminOrders from './AdminOrders.vue';
 import AdminReservations from './AdminReservations.vue';
@@ -88,11 +89,16 @@ import AdminSurveys from './AdminSurveys.vue';
 
 const adminStore = useAdminStore();
 const userStore = useUserStore();
+const toast = useToast();
 const activeTab = ref('Órdenes');
 const tabs = ['Órdenes', 'Reservas', 'Encuestas', 'Inventario'];
 
-onMounted(() => {
-  adminStore.fetchDashboardStats();
+onMounted(async () => {
+  await adminStore.fetchDashboardStats();
+  if (adminStore.error) {
+    toast.error(adminStore.error);
+    adminStore.error = null;
+  }
 });
 </script>
 

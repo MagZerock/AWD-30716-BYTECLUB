@@ -22,17 +22,15 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "ignoreDeprecations": "6.0",
 
     /* Path aliases */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@api/*": ["src/api/*"],
       "@components/*": ["src/components/*"],
       "@stores/*": ["src/stores/*"],
-      "@utils/*": ["src/utils/*"],
-      "@types/*": ["src/types/*"],
-      "@config/*": ["src/config/*"]
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

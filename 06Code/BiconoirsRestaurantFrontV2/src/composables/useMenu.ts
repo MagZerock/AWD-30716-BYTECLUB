@@ -2,7 +2,7 @@
 
 import { ref, computed } from 'vue';
 import apiClient from '../utils/api';
-import { Dish } from '@types/index';
+import { Dish } from '@/types/index';
 
 export const useMenu = () => {
   const dishes = ref<Dish[]>([]);

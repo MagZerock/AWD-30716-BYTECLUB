@@ -34,20 +34,16 @@
             ></textarea>
           </div>
 
-          <div v-if="error" class="error-message">
-            {{ error }}
-          </div>
-
           <div v-if="success" class="success-message">
             ¡Gracias por tu comentario!
           </div>
 
           <button
             type="submit"
-            :disabled="isLoading"
+            :disabled="surveyStore.isLoading"
             class="submit-btn"
           >
-            {{ isLoading ? 'Enviando...' : 'Enviar Encuesta' }}
+            {{ surveyStore.isLoading ? 'Enviando...' : 'Enviar Encuesta' }}
           </button>
         </form>
       </div>
@@ -56,48 +52,49 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import apiClient from '../utils/api';
+import { ref, reactive } from 'vue';
+import { useSurvey } from '../composables/useSurvey';
 import { useUserStore } from '../stores/userStore';
+import { useToast } from '../composables/useToast';
 
 const userStore = useUserStore();
+const surveyStore = reactive(useSurvey());
+const toast = useToast();
+
 const formData = ref({
   rating: 0,
   comments: ''
 });
-const isLoading = ref(false);
-const error = ref('');
 const success = ref(false);
 
 const submitSurvey = async () => {
   if (!userStore.isAuthenticated) {
-    error.value = 'Debes iniciar sesión para enviar una encuesta';
+    toast.error('Debes iniciar sesión para enviar una encuesta');
     return;
   }
 
   if (formData.value.rating === 0) {
-    error.value = 'Por favor selecciona una calificación';
+    toast.error('Por favor selecciona una calificación');
     return;
   }
 
-  isLoading.value = true;
-  error.value = '';
   success.value = false;
 
-  try {
-    await apiClient.post('/surveys', {
-      rating: formData.value.rating,
-      comments: formData.value.comments
-    });
+  const result = await surveyStore.submitSurvey(
+    formData.value.rating,
+    formData.value.comments
+  );
+
+  if (result) {
     success.value = true;
+    toast.success('¡Gracias por tu comentario!');
     formData.value = { rating: 0, comments: '' };
     setTimeout(() => {
       success.value = false;
     }, 3000);
-  } catch (err: any) {
-    error.value = err.response?.data?.error || 'Error al enviar la encuesta';
-  } finally {
-    isLoading.value = false;
+  } else if (surveyStore.error) {
+    toast.error(surveyStore.error);
+    surveyStore.error = null;
   }
 };
 </script>

@@ -36,6 +36,8 @@
       <router-view />
     </main>
 
+    <ToastNotification />
+
     <footer class="footer">
       <div class="container footer-content">
         <div class="footer-section">
@@ -57,6 +59,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore';
+import ToastNotification from '../ToastNotification.vue';
 
 const userStore = useUserStore();
 </script>

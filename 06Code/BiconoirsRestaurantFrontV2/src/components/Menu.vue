@@ -58,10 +58,12 @@
 import { onMounted, reactive } from 'vue';
 import { useMenu } from '../composables/useMenu';
 import { useCartStore } from '../stores/cartStore';
+import { useToast } from '../composables/useToast';
 import { formatPrice } from '../utils/formatters';
 
 const menuStore = reactive(useMenu());
 const cartStore = useCartStore();
+const toast = useToast();
 
 onMounted(() => {
   menuStore.fetchDishes();
@@ -70,7 +72,7 @@ onMounted(() => {
 
 const addToCart = (dish: any) => {
   cartStore.addItem(dish, 1);
-  alert(`${dish.name} agregado al carrito`);
+  toast.success(`${dish.name} agregado al carrito`);
 };
 </script>
 

@@ -51,8 +51,21 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('auth_token');
       window.location.href = '/login';
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
+
+    if (!error.response) {
+      const networkError = new Error(
+        'Error de conexión. Verifica tu internet o intenta más tarde.'
+      );
+      return Promise.reject(networkError);
+    }
+
+    const serverError = new Error(
+      error.response?.data?.error ||
+        `Error del servidor (${error.response?.status})`
+    );
+    return Promise.reject(serverError);
   }
 );
 

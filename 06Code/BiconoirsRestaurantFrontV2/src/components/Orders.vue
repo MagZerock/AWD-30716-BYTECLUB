@@ -58,13 +58,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 import { useOrders } from '../composables/useOrders';
 import { useUserStore } from '../stores/userStore';
+import { useToast } from '../composables/useToast';
 import { formatPrice, formatDate, getStatusLabel } from '@utils/formatters';
 
-const ordersStore = useOrders();
+const ordersStore = reactive(useOrders());
 const userStore = useUserStore();
+const toast = useToast();
 
 onMounted(() => {
   if (userStore.isAuthenticated) {
@@ -78,7 +80,10 @@ const getStatusClass = (status: string) => {
 
 const cancelOrder = async (id: string) => {
   if (confirm('¿Deseas cancelar esta orden?')) {
-    await ordersStore.cancelOrder(id);
+    const success = await ordersStore.cancelOrder(id);
+    if (success) {
+      toast.success('Orden cancelada');
+    }
   }
 };
 </script>

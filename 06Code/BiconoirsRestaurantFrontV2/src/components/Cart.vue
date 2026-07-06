@@ -44,10 +44,6 @@
             <span>{{ formatPrice(cartStore.totalPrice) }}</span>
           </div>
 
-          <div v-if="cartStore.error" class="error-message">
-            {{ cartStore.error }}
-          </div>
-
           <button
             @click="handleCheckout"
             :disabled="cartStore.isLoading || !userStore.isAuthenticated"
@@ -71,17 +67,22 @@
 import { useCartStore } from '../stores/cartStore';
 import { useUserStore } from '../stores/userStore';
 import { useRouter } from 'vue-router';
+import { useToast } from '../composables/useToast';
 import { formatPrice } from '../utils/formatters';
 
 const cartStore = useCartStore();
 const userStore = useUserStore();
 const router = useRouter();
+const toast = useToast();
 
 const handleCheckout = async () => {
   const order = await cartStore.checkout();
   if (order) {
-    alert('¡Pedido creado exitosamente!');
+    toast.success('¡Pedido creado exitosamente!');
     router.push('/orders');
+  } else if (cartStore.error) {
+    toast.error(cartStore.error);
+    cartStore.error = null;
   }
 };
 </script>

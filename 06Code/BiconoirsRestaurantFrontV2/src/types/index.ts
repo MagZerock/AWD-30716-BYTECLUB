@@ -55,6 +55,8 @@ export interface Order {
   delivery_date?: Date;
   created_at: Date;
   updated_at: Date;
+  customer?: User;
+  orderDetails?: OrderDetail[];
 }
 
 export interface OrderDetail {
@@ -65,6 +67,7 @@ export interface OrderDetail {
   unit_price: number;
   subtotal: number;
   created_at: Date;
+  dish?: Dish;
 }
 
 export interface Reservation {
@@ -76,6 +79,7 @@ export interface Reservation {
   special_requests?: string;
   created_at: Date;
   updated_at: Date;
+  customer?: User;
 }
 
 export interface Survey {
@@ -85,6 +89,7 @@ export interface Survey {
   comments?: string;
   submitted_at: Date;
   created_at: Date;
+  customer?: User;
 }
 
 export interface FinancialReport {

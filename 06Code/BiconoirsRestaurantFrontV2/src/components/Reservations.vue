@@ -47,10 +47,6 @@
               ></textarea>
             </div>
 
-            <div v-if="reservationsStore.error" class="error-message">
-              {{ reservationsStore.error }}
-            </div>
-
             <button
               type="submit"
               :disabled="reservationsStore.isLoading"
@@ -106,13 +102,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useReservations } from '../composables/useReservations';
 import { useUserStore } from '../stores/userStore';
+import { useToast } from '../composables/useToast';
 import { formatDate, formatTime, getStatusLabel } from '../utils/formatters';
 
-const reservationsStore = useReservations();
+const reservationsStore = reactive(useReservations());
 const userStore = useUserStore();
+const toast = useToast();
 
 const formData = ref({
   date: '',
@@ -138,14 +136,23 @@ const handleCreateReservation = async () => {
   );
 
   if (success) {
-    alert('¡Reserva creada exitosamente!');
+    toast.success('¡Reserva creada exitosamente!');
     formData.value = { date: '', partySize: 2, requests: '' };
+  } else if (reservationsStore.error) {
+    toast.error(reservationsStore.error);
+    reservationsStore.error = null;
   }
 };
 
 const cancelReservation = async (id: string) => {
   if (confirm('¿Deseas cancelar esta reserva?')) {
-    await reservationsStore.cancelReservation(id);
+    const success = await reservationsStore.cancelReservation(id);
+    if (success) {
+      toast.success('Reserva cancelada');
+    } else if (reservationsStore.error) {
+      toast.error(reservationsStore.error);
+      reservationsStore.error = null;
+    }
   }
 };
 </script>

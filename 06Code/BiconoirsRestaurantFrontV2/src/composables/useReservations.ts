@@ -2,7 +2,7 @@
 
 import { ref } from 'vue';
 import apiClient from '../utils/api';
-import { Reservation } from '@types/index';
+import { Reservation } from '@/types/index';
 
 export const useReservations = () => {
   const reservations = ref<Reservation[]>([]);
