@@ -18,7 +18,6 @@ import { ApiOrdersModule } from "./api/orders/api-orders.module";
 import { ApiReservationsModule } from "./api/reservations/api-reservations.module";
 import { ApiSurveysModule } from "./api/surveys/api-surveys.module";
 import { ApiAdminModule } from "./api/admin/api-admin.module";
-import { AdminController } from "./admin/admin.controller";
 
 @Module({
   imports: [
@@ -42,6 +41,5 @@ import { AdminController } from "./admin/admin.controller";
     ApiSurveysModule,
     ApiAdminModule,
   ],
-  controllers: [AdminController],
 })
 export class AppModule {}

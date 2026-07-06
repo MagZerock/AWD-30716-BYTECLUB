@@ -9,15 +9,12 @@ import {
   Patch,
   Post,
   Put,
-  UseGuards,
 } from "@nestjs/common";
 import { ApiReservationsService } from "./api-reservations.service";
 import { CreateReservationDto } from "./dto/create-reservation.dto";
 import { UpdateReservationDto } from "./dto/update-reservation.dto";
-import { AuthGuard } from "../../auth/auth.guard";
 
-@Controller("reservations")
-@UseGuards(AuthGuard)
+@Controller("api/v1/reservations")
 export class ApiReservationsController {
   constructor(private readonly apiReservationsService: ApiReservationsService) {}
 
