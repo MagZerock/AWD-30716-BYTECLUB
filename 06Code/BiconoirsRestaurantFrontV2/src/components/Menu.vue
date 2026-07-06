@@ -55,12 +55,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 import { useMenu } from '../composables/useMenu';
 import { useCartStore } from '../stores/cartStore';
 import { formatPrice } from '../utils/formatters';
 
-const menuStore = useMenu();
+const menuStore = reactive(useMenu());
 const cartStore = useCartStore();
 
 onMounted(() => {

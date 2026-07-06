@@ -36,10 +36,10 @@ export const useMenu = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await apiClient.get<{ success: boolean; data: string[] }>(
+      const response = await apiClient.get<{ success: boolean; data: any[] }>(
         '/menu/categories'
       );
-      categories.value = response.data.data;
+      categories.value = response.data.data.map((c: any) => c.name || c);
     } catch (err) {
       console.error('Failed to fetch categories:', err);
     }
