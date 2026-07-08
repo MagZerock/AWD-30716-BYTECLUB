@@ -190,12 +190,78 @@ h2 {
 	background-color: #c0392b;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
 	.reservations-content {
-		grid-template-columns: 1fr;
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 768px) {
+	.reservations-container {
+		padding: 1.5rem 0 2rem;
 	}
 
-	.new-reservation {
-		height: auto;
+	h1 {
+		font-size: 1.5rem;
+		margin-bottom: 1.25rem;
+	}
+
+	h2 {
+		font-size: 1.2rem;
+		margin-bottom: 1rem;
+	}
+
+	.reservations-content {
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+	}
+
+	.new-reservation,
+	.reservations-list {
+		padding: 1.25rem;
+	}
+
+	.form-group {
+		margin-bottom: 0.85rem;
+	}
+
+	.form-group label {
+		font-size: 0.9rem;
+	}
+
+	.form-group input,
+	.form-group textarea {
+		padding: 0.7rem 0.85rem;
+		font-size: 0.95rem;
+	}
+
+	.reservations-grid {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	.reservation-card {
+		padding: 0.85rem;
+	}
+
+	.res-header h3 {
+		font-size: 0.95rem;
+	}
+
+	.res-details p {
+		font-size: 0.85rem;
+	}
+
+	.submit-btn {
+		padding: 0.75rem;
+		font-size: 0.95rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.res-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
 	}
 }

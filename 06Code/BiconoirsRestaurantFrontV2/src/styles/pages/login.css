@@ -95,3 +95,40 @@
 .signup-link a:hover {
 	text-decoration: underline;
 }
+
+@media (max-width: 768px) {
+	.login-container {
+		padding: 1.5rem 1rem;
+		min-height: 60vh;
+	}
+
+	.login-card {
+		padding: 1.5rem;
+		border-radius: 18px;
+	}
+
+	.login-card h1 {
+		font-size: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.form-group {
+		margin-bottom: 1rem;
+	}
+
+	.form-group input {
+		padding: 0.75rem 0.85rem;
+		font-size: 0.95rem;
+	}
+
+	.submit-btn {
+		padding: 0.75rem;
+		font-size: 0.95rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.login-card {
+		padding: 1.25rem;
+	}
+}

@@ -32,14 +32,14 @@
       </thead>
       <tbody>
         <tr v-for="order in adminStore.orders" :key="order.order_id">
-          <td>{{ order.order_id.slice(0, 8) }}</td>
-          <td>{{ order.customer?.name || order.customer?.email || order.customer_id?.slice(0, 8) || '-' }}</td>
-          <td>{{ formatPrice(order.total_amount) }}</td>
-          <td>
+          <td data-label="ID">{{ order.order_id.slice(0, 8) }}</td>
+          <td data-label="Cliente">{{ order.customer?.name || order.customer?.email || order.customer_id?.slice(0, 8) || '-' }}</td>
+          <td data-label="Total">{{ formatPrice(order.total_amount) }}</td>
+          <td data-label="Estado">
             <span :class="['status-badge', statusClass(order.status)]">{{ statusLabel(order.status) }}</span>
           </td>
-          <td>{{ formatDate(order.created_at) }}</td>
-          <td class="actions">
+          <td data-label="Fecha">{{ formatDate(order.created_at) }}</td>
+          <td class="actions" data-label="Acciones">
             <button
               v-if="canConfirm(order.status)"
               @click="updateStatus(order.order_id, 'Confirmed')"
@@ -188,4 +188,74 @@ const canCancel = (s: string) => !['completed', 'completada', 'completado', 'can
 .btn-confirm { background: #27ae60; color: #fff; }
 .btn-complete { background: #3498db; color: #fff; }
 .btn-danger { background: #e74c3c; color: #fff; }
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .refresh-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .orders-table,
+  .orders-table thead,
+  .orders-table tbody,
+  .orders-table tr,
+  .orders-table th,
+  .orders-table td {
+    display: block;
+  }
+
+  .orders-table thead {
+    display: none;
+  }
+
+  .orders-table tr {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #ecf0f1;
+    padding: 0.75rem;
+  }
+
+  .orders-table td {
+    padding: 0.4rem 0;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .orders-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #2c3e50;
+    flex-shrink: 0;
+  }
+
+  .orders-table td.actions {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ecf0f1;
+    margin-top: 0.5rem;
+  }
+
+  .btn-sm {
+    flex: 1;
+    text-align: center;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.78rem;
+  }
+}
 </style>

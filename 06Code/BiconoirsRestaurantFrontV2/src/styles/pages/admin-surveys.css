@@ -16,3 +16,9 @@
 .admin-surveys h3 {
 	color: var(--color-primary-dark);
 }
+
+@media (max-width: 768px) {
+	.admin-surveys {
+		padding: 1.5rem 0 2rem;
+	}
+}

@@ -20,18 +20,18 @@
       </thead>
       <tbody>
         <tr v-for="d in dishes" :key="d.itemId || d.item_id">
-          <td>{{ d.name }}</td>
-          <td>{{ categoryName(d.categoryId) }}</td>
-          <td>{{ formatPrice(d.price) }}</td>
-          <td>
+          <td data-label="Nombre">{{ d.name }}</td>
+          <td data-label="Categoría">{{ categoryName(d.categoryId) }}</td>
+          <td data-label="Precio">{{ formatPrice(d.price) }}</td>
+          <td data-label="Disponible">
             <span :class="d.isAvailable ? 'badge badge-green' : 'badge badge-red'">
               {{ d.isAvailable ? 'Sí' : 'No' }}
             </span>
           </td>
-          <td>
+          <td data-label="Imagen">
             <img v-if="d.imageUrl" :src="d.imageUrl" class="thumb" />
           </td>
-          <td class="actions">
+          <td class="actions" data-label="Acciones">
             <button @click="openEditModal(d)" class="btn-sm btn-edit">✏️</button>
             <button @click="confirmDelete(d)" class="btn-sm btn-danger">🗑️</button>
           </td>
@@ -243,4 +243,72 @@ onMounted(loadData);
 .field input, .field select, .field textarea { padding: 0.55rem; border: 1px solid #bdc3c7; border-radius: 6px; font-size: 0.9rem; }
 .field textarea { resize: vertical; }
 .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: flex-end; }
+
+@media (max-width: 768px) {
+  .data-table,
+  .data-table thead,
+  .data-table tbody,
+  .data-table tr,
+  .data-table th,
+  .data-table td {
+    display: block;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table tr {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #ecf0f1;
+    padding: 0.75rem;
+  }
+
+  .data-table td {
+    padding: 0.4rem 0;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #2c3e50;
+    flex-shrink: 0;
+  }
+
+  .data-table td.actions {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ecf0f1;
+    margin-top: 0.5rem;
+  }
+
+  .thumb {
+    width: 40px;
+    height: 40px;
+  }
+
+  .btn-sm {
+    flex: 1;
+    text-align: center;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    padding: 1.25rem;
+    width: 95%;
+  }
+}
 </style>

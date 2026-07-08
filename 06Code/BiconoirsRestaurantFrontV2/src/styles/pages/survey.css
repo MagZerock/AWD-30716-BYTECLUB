@@ -117,3 +117,63 @@ h1 {
 .submit-btn:disabled {
 	background-color: #95a5a6;
 }
+
+@media (max-width: 768px) {
+	.survey-container {
+		padding: 1.5rem 1rem 2rem;
+	}
+
+	h1 {
+		font-size: 1.5rem;
+	}
+
+	.subtitle {
+		font-size: 0.95rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.survey-card {
+		padding: 1.25rem;
+		border-radius: 18px;
+	}
+
+	.form-group {
+		margin-bottom: 1.5rem;
+	}
+
+	.form-group label {
+		font-size: 0.95rem;
+	}
+
+	.rating {
+		gap: 0.5rem;
+	}
+
+	.star-btn {
+		font-size: 2rem;
+	}
+
+	.form-group textarea {
+		padding: 0.75rem;
+		font-size: 0.95rem;
+	}
+
+	.submit-btn {
+		padding: 0.85rem;
+		font-size: 0.95rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.survey-card {
+		padding: 1rem;
+	}
+
+	.rating {
+		gap: 0.35rem;
+	}
+
+	.star-btn {
+		font-size: 1.6rem;
+	}
+}

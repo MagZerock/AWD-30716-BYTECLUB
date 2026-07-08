@@ -112,4 +112,32 @@ const loadSurveys = async () => {
   font-size: 0.85rem;
   color: #95a5a6;
 }
+
+@media (max-width: 768px) {
+  .refresh-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .surveys-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .survey-card {
+    padding: 0.85rem;
+  }
+
+  .stars {
+    font-size: 1rem;
+  }
+
+  .customer {
+    font-size: 0.9rem;
+  }
+
+  .comments {
+    font-size: 0.85rem;
+  }
+}
 </style>

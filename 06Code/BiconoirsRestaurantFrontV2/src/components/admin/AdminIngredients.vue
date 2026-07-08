@@ -19,11 +19,11 @@
       </thead>
       <tbody>
         <tr v-for="item in items" :key="item.skuCode || item.sku_code">
-          <td>{{ item.name }}</td>
-          <td>{{ item.category || '-' }}</td>
-          <td>{{ item.unitOfMeasurement || item.unit_of_measurement }}</td>
-          <td>{{ formatPrice(item.unitCost ?? item.unit_cost) }}</td>
-          <td class="actions">
+          <td data-label="Nombre">{{ item.name }}</td>
+          <td data-label="Categoría">{{ item.category || '-' }}</td>
+          <td data-label="Unidad">{{ item.unitOfMeasurement || item.unit_of_measurement }}</td>
+          <td data-label="Costo">{{ formatPrice(item.unitCost ?? item.unit_cost) }}</td>
+          <td class="actions" data-label="Acciones">
             <button @click="openEditModal(item)" class="btn-sm btn-edit">✏️</button>
             <button @click="confirmDelete(item)" class="btn-sm btn-danger">🗑️</button>
           </td>
@@ -193,4 +193,67 @@ onMounted(loadData);
 .field input, .field select, .field textarea { padding: 0.55rem; border: 1px solid #bdc3c7; border-radius: 6px; font-size: 0.9rem; }
 .field textarea { resize: vertical; }
 .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: flex-end; }
+
+@media (max-width: 768px) {
+  .data-table,
+  .data-table thead,
+  .data-table tbody,
+  .data-table tr,
+  .data-table th,
+  .data-table td {
+    display: block;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table tr {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #ecf0f1;
+    padding: 0.75rem;
+  }
+
+  .data-table td {
+    padding: 0.4rem 0;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #2c3e50;
+    flex-shrink: 0;
+  }
+
+  .data-table td.actions {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ecf0f1;
+    margin-top: 0.5rem;
+  }
+
+  .btn-sm {
+    flex: 1;
+    text-align: center;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    padding: 1.25rem;
+    width: 95%;
+  }
+}
 </style>

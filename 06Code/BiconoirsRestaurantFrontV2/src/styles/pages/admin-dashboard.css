@@ -23,3 +23,9 @@
 .admin-accent {
 	color: var(--color-primary);
 }
+
+@media (max-width: 768px) {
+	.admin-dashboard {
+		padding: 1.5rem 0 2rem;
+	}
+}

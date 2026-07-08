@@ -150,13 +150,66 @@ h1 {
 }
 
 @media (max-width: 768px) {
+	.orders-container {
+		padding: 1.5rem 0 2rem;
+	}
+
+	h1 {
+		font-size: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
 	.order-header {
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 0.5rem;
+		padding: 0.85rem;
+	}
+
+	.order-header h3 {
+		font-size: 1rem;
+	}
+
+	.status {
+		font-size: 0.78rem;
 	}
 
 	.order-details {
 		grid-template-columns: 1fr;
+		gap: 0.5rem;
+		padding: 0.85rem;
+	}
+
+	.order-details p {
+		font-size: 0.9rem;
+	}
+
+	.order-items {
+		padding: 0.85rem;
+	}
+
+	.order-item {
+		font-size: 0.85rem;
+		padding: 0.35rem 0;
+	}
+
+	.order-actions {
+		padding: 0.85rem;
+		flex-direction: column;
+	}
+
+	.cancel-btn {
+		width: 100%;
+		text-align: center;
+	}
+}
+
+@media (max-width: 480px) {
+	.orders-list {
+		gap: 1rem;
+	}
+
+	.order-card {
+		border-radius: 16px;
 	}
 }

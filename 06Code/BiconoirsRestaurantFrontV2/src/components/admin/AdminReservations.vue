@@ -31,15 +31,15 @@
       </thead>
       <tbody>
         <tr v-for="res in reservations" :key="res.reservationId || res.reservation_id">
-          <td>{{ res.customer?.name || res.user?.name || '-' }}</td>
-          <td>{{ formatDate(res.reservationDate ?? res.reservation_date) }}</td>
-          <td>{{ formatTime(res.reservationTime ?? res.reservation_time) }}</td>
-          <td>{{ res.partySize ?? res.party_size }}</td>
-          <td>{{ res.specialRequests || res.special_requests || '-' }}</td>
-          <td>
+          <td data-label="Cliente">{{ res.customer?.name || res.user?.name || '-' }}</td>
+          <td data-label="Fecha">{{ formatDate(res.reservationDate ?? res.reservation_date) }}</td>
+          <td data-label="Hora">{{ formatTime(res.reservationTime ?? res.reservation_time) }}</td>
+          <td data-label="Personas">{{ res.partySize ?? res.party_size }}</td>
+          <td data-label="Solicitudes">{{ res.specialRequests || res.special_requests || '-' }}</td>
+          <td data-label="Estado">
             <span :class="statusBadge(res.status).class">{{ statusBadge(res.status).label }}</span>
           </td>
-          <td class="actions">
+          <td class="actions" data-label="Acciones">
             <button
               v-if="res.status === 'Pending' || res.status === 'pending'"
               @click="changeStatus(res, 'Confirmed')"
@@ -125,4 +125,71 @@ const statusBadge = (status: string) => {
 .badge-yellow { background: #fef9e7; color: #f39c12; }
 .badge-red { background: #fde8e8; color: #e74c3c; }
 .loading, .empty { text-align: center; padding: 2rem; color: #7f8c8d; }
+
+@media (max-width: 768px) {
+  .data-table,
+  .data-table thead,
+  .data-table tbody,
+  .data-table tr,
+  .data-table th,
+  .data-table td {
+    display: block;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table tr {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #ecf0f1;
+    padding: 0.75rem;
+  }
+
+  .data-table td {
+    padding: 0.4rem 0;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #2c3e50;
+    flex-shrink: 0;
+  }
+
+  .data-table td.actions {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ecf0f1;
+    margin-top: 0.5rem;
+  }
+
+  .btn-sm {
+    flex: 1;
+    text-align: center;
+  }
+
+  .toolbar {
+    flex-direction: column;
+  }
+
+  .toolbar .filter-select {
+    width: 100%;
+  }
+
+  .toolbar .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
 </style>

@@ -238,4 +238,83 @@ h1 {
   padding: 2rem;
   color: #7f8c8d;
 }
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem 0;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .stat-icon {
+    font-size: 1.8rem;
+    width: 50px;
+    height: 50px;
+  }
+
+  .stat-value {
+    font-size: 1.3rem;
+  }
+
+  .nav-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0;
+    border-radius: 8px;
+  }
+
+  .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tab-content {
+    padding: 1rem;
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .stat-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 0.85rem;
+  }
+
+  .tab-btn {
+    padding: 0.6rem 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .tab-content {
+    padding: 0.75rem;
+  }
+}
 </style>

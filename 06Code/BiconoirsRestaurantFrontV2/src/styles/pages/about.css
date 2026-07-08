@@ -60,15 +60,47 @@ h2 {
 }
 
 @media (max-width: 768px) {
+	.about-container {
+		padding: 1.5rem 0 2rem;
+	}
+
 	h1 {
-		font-size: 1.8rem;
+		font-size: 1.6rem;
+		margin-bottom: 2rem;
 	}
 
 	h2 {
-		font-size: 1.3rem;
+		font-size: 1.2rem;
+		margin-bottom: 0.75rem;
 	}
 
 	.about-section {
-		padding: 1.5rem;
+		padding: 1.25rem;
+		margin-bottom: 1.25rem;
+		border-radius: 16px;
+	}
+
+	.about-section p {
+		font-size: 0.95rem;
+		line-height: 1.6;
+	}
+
+	.values-list li {
+		font-size: 0.95rem;
+		padding: 0.5rem 0;
+	}
+
+	.contact-info p {
+		font-size: 0.9rem;
+	}
+}
+
+@media (max-width: 480px) {
+	h1 {
+		font-size: 1.4rem;
+	}
+
+	.about-section {
+		padding: 1rem;
 	}
 }
