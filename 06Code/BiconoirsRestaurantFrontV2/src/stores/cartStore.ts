@@ -85,7 +85,7 @@ export const useCartStore = defineStore('cart', () => {
 
   const checkout = async () => {
     if (items.value.length === 0) {
-      error.value = 'Cart is empty';
+      error.value = 'El carrito está vacío';
       return false;
     }
 
@@ -112,7 +112,7 @@ export const useCartStore = defineStore('cart', () => {
       clearCart();
       return response.data.data;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Checkout failed';
+      error.value = err.response?.data?.error || 'Error al procesar el pedido';
       return false;
     } finally {
       isLoading.value = false;

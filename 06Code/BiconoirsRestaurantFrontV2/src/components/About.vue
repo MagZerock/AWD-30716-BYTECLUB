@@ -8,9 +8,9 @@
       <section class="about-section">
         <h2>Biconoir Gourmet</h2>
         <p>
-          Somos un restaurante de clase mundial dedicado a ofrecer una experiencia
+          Somos un restaurante de primer nivel en Quito, Ecuador, dedicado a ofrecer una experiencia
           culinaria excepcional. Con más de 15 años de trayectoria, nos hemos
-          posicionado como uno de los mejores establecimientos gastronómicos de la región.
+          posicionado como uno de los mejores establecimientos gastronómicos del país.
         </p>
       </section>
 
@@ -37,9 +37,9 @@
       <section class="about-section">
         <h2>Contacto</h2>
         <div class="contact-info">
-          <p><strong>Teléfono:</strong> +57 (1) 123-4567</p>
+          <p><strong>Teléfono:</strong> +593 2 512-3456</p>
           <p><strong>Email:</strong> info@bicoinoirgourmet.com</p>
-          <p><strong>Dirección:</strong> Calle 10 #5-50, Bogotá, Colombia</p>
+          <p><strong>Dirección:</strong> Av. República de El Salvador N34-102, Quito, Ecuador</p>
           <p><strong>Horario:</strong> Lunes a Domingo, 12:00 PM - 11:00 PM</p>
         </div>
       </section>

@@ -34,7 +34,7 @@
             id="phone"
             v-model="phone"
             type="tel"
-            placeholder="+57 300 1234567"
+            placeholder="+593 99 999 9999"
           />
         </div>
 
@@ -113,7 +113,7 @@ const handleRegister = async () => {
     return;
   }
   if (!validatePassword(password.value)) {
-    toast.error('La contraseña debe tener al menos 6 caracteres');
+    toast.error('La contraseña debe tener al menos 8 caracteres');
     return;
   }
   if (passwordError.value) {

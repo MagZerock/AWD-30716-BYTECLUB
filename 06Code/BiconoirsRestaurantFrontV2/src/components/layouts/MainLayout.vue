@@ -25,6 +25,7 @@
             <router-link to="/login" class="login-btn">Entrar</router-link>
           </div>
           <div v-else class="user-menu">
+            <router-link v-if="userStore.isAdmin" to="/admin/dashboard" class="admin-link">Admin</router-link>
             <span class="user-name">{{ userStore.user?.name || 'Usuario' }}</span>
             <button class="logout-btn" @click="userStore.logout()">Salir</button>
           </div>

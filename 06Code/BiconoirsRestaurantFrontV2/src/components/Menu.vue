@@ -65,9 +65,9 @@ const menuStore = reactive(useMenu());
 const cartStore = useCartStore();
 const toast = useToast();
 
-onMounted(() => {
-  menuStore.fetchDishes();
-  menuStore.fetchCategories();
+onMounted(async () => {
+  await menuStore.fetchCategories();
+  await menuStore.fetchDishes();
 });
 
 const addToCart = (dish: any) => {

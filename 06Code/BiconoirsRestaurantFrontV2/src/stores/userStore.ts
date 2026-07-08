@@ -3,7 +3,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import apiClient from '../utils/api';
-import { User, AuthResponse } from '@/types/index';
+import { User } from '@/types/index';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null);
@@ -21,24 +21,41 @@ export const useUserStore = defineStore('user', () => {
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     } else {
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('user_id');
       delete apiClient.defaults.headers.common['Authorization'];
     }
   };
+
+  const saveUserId = (id: string) => {
+    localStorage.setItem('user_id', id);
+    apiClient.defaults.headers.common['x-user-id'] = id;
+  };
+
+  const mapUserFromApi = (apiUser: any): User => ({
+    user_id: apiUser.userId ?? apiUser.user_id,
+    name: apiUser.name,
+    email: apiUser.email,
+    phone: apiUser.phone,
+    role: apiUser.role ?? 'customer',
+    created_at: apiUser.createdAt ?? apiUser.created_at ?? new Date(),
+    updated_at: apiUser.updatedAt ?? apiUser.updated_at ?? new Date(),
+  });
 
   const login = async (email: string, password: string) => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.post<{ success: boolean; data: AuthResponse }>('/auth/login', {
+      const response = await apiClient.post('/auth/login', {
         email,
         password
       });
-      const { token: newToken, user: newUser } = response.data.data;
-      setToken(newToken);
-      user.value = newUser;
+      const { accessToken, user: userData } = response.data.data;
+      setToken(accessToken);
+      user.value = mapUserFromApi(userData);
+      saveUserId(userData.userId ?? userData.user_id);
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Login failed';
+      error.value = err.response?.data?.error || 'Error al iniciar sesión';
       return false;
     } finally {
       isLoading.value = false;
@@ -54,18 +71,19 @@ export const useUserStore = defineStore('user', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.post<{ success: boolean; data: AuthResponse }>('/auth/register', {
+      const response = await apiClient.post('/auth/register', {
         name,
         email,
-        password: password,
+        passwordHash: password,
         phone
       });
-      const { token: newToken, user: newUser } = response.data.data;
-      setToken(newToken);
-      user.value = newUser;
+      const { accessToken, user: userData } = response.data.data;
+      setToken(accessToken);
+      user.value = mapUserFromApi(userData);
+      saveUserId(userData.userId ?? userData.user_id);
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Registration failed';
+      error.value = err.response?.data?.error || 'Error al registrarse';
       return false;
     } finally {
       isLoading.value = false;
@@ -81,10 +99,8 @@ export const useUserStore = defineStore('user', () => {
     if (!token.value) return;
     isLoading.value = true;
     try {
-      const response = await apiClient.get<{ message: string; data: User }>(
-        '/auth/me'
-      );
-      user.value = response.data.data;
+      const response = await apiClient.get('/auth/me');
+      user.value = mapUserFromApi(response.data.data);
     } catch (err) {
       logout();
     } finally {

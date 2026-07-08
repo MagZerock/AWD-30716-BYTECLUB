@@ -5,7 +5,7 @@
     <section class="hero">
       <div class="container hero-content">
         <h1>SABOR &<br>ELEGANCIA</h1>
-        <p>Descubre la verdadera cocina gourmet en el corazón de la ciudad.</p>
+        <p>Descubre la verdadera cocina gourmet en el corazón de Quito.</p>
         <div class="hero-buttons">
           <router-link to="/reservations" class="hero-link">RESERVAR AHORA</router-link>
           <router-link to="/menu" class="hero-btn-outline">VER LA CARTA</router-link>
@@ -16,29 +16,22 @@
     <section class="featured-dishes">
       <div class="container">
         <h2>Platos Destacados</h2>
-        <div class="dishes-grid">
-          <div class="dish-card">
-            <img src="@/assets/img/food1.jpg" alt="Plato 1" class="dish-image">
+
+        <div v-if="isLoading" class="loading">Cargando platos destacados...</div>
+        <div v-else-if="featuredDishes.length === 0" class="loading">
+          No hay platos disponibles
+        </div>
+        <div v-else class="dishes-grid">
+          <div v-for="dish in featuredDishes" :key="dish.dish_id" class="dish-card">
+            <img
+              :src="dish.image_url || '/img/placeholder.jpg'"
+              :alt="dish.name"
+              class="dish-image"
+            />
             <div class="dish-info">
-              <h3>Plato Premium</h3>
-              <p>Preparación exclusiva del chef</p>
-              <span class="price">$28.90</span>
-            </div>
-          </div>
-          <div class="dish-card">
-            <img src="@/assets/img/food2.jpg" alt="Plato 2" class="dish-image">
-            <div class="dish-info">
-              <h3>Especialidad Gourmet</h3>
-              <p>Con ingredientes frescos seleccionados</p>
-              <span class="price">$32.50</span>
-            </div>
-          </div>
-          <div class="dish-card">
-            <img src="@/assets/img/food3.jpg" alt="Plato 3" class="dish-image">
-            <div class="dish-info">
-              <h3>Creación del Día</h3>
-              <p>Chef's special de temporada</p>
-              <span class="price">$25.00</span>
+              <h3>{{ dish.name }}</h3>
+              <p>{{ dish.description }}</p>
+              <span class="price">{{ formatPrice(dish.price) }}</span>
             </div>
           </div>
         </div>
@@ -83,6 +76,33 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import apiClient from '../utils/api';
+import { formatPrice } from '../utils/formatters';
+
+const featuredDishes = ref<any[]>([]);
+const isLoading = ref(false);
+
+const mapDish = (d: any) => ({
+  dish_id: d.itemId ?? d.dish_id,
+  name: d.name,
+  description: d.description,
+  price: Number(d.price),
+  image_url: d.imageUrl ?? d.image_url,
+});
+
+onMounted(async () => {
+  isLoading.value = true;
+  try {
+    const res = await apiClient.get('/menu/dishes');
+    const raw: any[] = res.data.data ?? [];
+    featuredDishes.value = raw.map(mapDish).slice(0, 2);
+  } catch {
+    // API error — empty stays
+  } finally {
+    isLoading.value = false;
+  }
+});
 </script>
 
 <!-- Import page styles -->

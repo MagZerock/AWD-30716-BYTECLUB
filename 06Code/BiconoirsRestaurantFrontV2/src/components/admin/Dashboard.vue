@@ -11,66 +11,55 @@
       </div>
 
       <div v-else>
-        <div v-if="adminStore.isLoading" class="loading">Cargando datos...</div>
-
-        <div v-else>
-          <!-- Stats Cards -->
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-icon orders">📦</div>
-              <div class="stat-content">
-                <p class="stat-label">Total Órdenes</p>
-                <p class="stat-value">{{ adminStore.stats?.totalOrders || 0 }}</p>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon revenue">💰</div>
-              <div class="stat-content">
-                <p class="stat-label">Ingresos Totales</p>
-                <p class="stat-value">{{ formatPrice(adminStore.stats?.totalRevenue || 0) }}</p>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon pending">⏳</div>
-              <div class="stat-content">
-                <p class="stat-label">Órdenes Pendientes</p>
-                <p class="stat-value">{{ adminStore.stats?.pendingOrders || 0 }}</p>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon customers">👥</div>
-              <div class="stat-content">
-                <p class="stat-label">Total Clientes</p>
-                <p class="stat-value">{{ adminStore.stats?.totalCustomers || 0 }}</p>
-              </div>
+        <div v-if="statsLoading" class="loading">Cargando datos...</div>
+        <div v-else class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon orders">📦</div>
+            <div class="stat-content">
+              <p class="stat-label">Total Órdenes</p>
+              <p class="stat-value">{{ adminStore.stats?.totalOrders || 0 }}</p>
             </div>
           </div>
-
-          <!-- Navigation Tabs -->
-          <div class="nav-tabs">
-            <button
-              v-for="tab in tabs"
-              :key="tab"
-              @click="activeTab = tab"
-              :class="{ active: activeTab === tab }"
-              class="tab-btn"
-            >
-              {{ tab }}
-            </button>
-          </div>
-
-          <!-- Tab Content -->
-          <div class="tab-content">
-            <AdminOrders v-if="activeTab === 'Órdenes'" />
-            <AdminReservations v-if="activeTab === 'Reservas'" />
-            <AdminSurveys v-if="activeTab === 'Encuestas'" />
-            <div v-if="activeTab === 'Inventario'" class="placeholder">
-              Componente de Inventario (AdminInventory)
+          <div class="stat-card">
+            <div class="stat-icon revenue">💰</div>
+            <div class="stat-content">
+              <p class="stat-label">Ingresos Totales</p>
+              <p class="stat-value">{{ formatPrice(adminStore.stats?.totalRevenue || 0) }}</p>
             </div>
           </div>
+          <div class="stat-card">
+            <div class="stat-icon pending">⏳</div>
+            <div class="stat-content">
+              <p class="stat-label">Órdenes Pendientes</p>
+              <p class="stat-value">{{ adminStore.stats?.pendingOrders || 0 }}</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon customers">👥</div>
+            <div class="stat-content">
+              <p class="stat-label">Total Clientes</p>
+              <p class="stat-value">{{ adminStore.stats?.totalCustomers || 0 }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-tabs">
+          <button
+            v-for="tab in tabs"
+            :key="tab"
+            @click="activeTab = tab"
+            :class="{ active: activeTab === tab }"
+            class="tab-btn"
+          >{{ tab }}</button>
+        </div>
+
+        <div class="tab-content">
+          <AdminOrders v-if="activeTab === 'Órdenes'" />
+          <AdminMenu v-if="activeTab === 'Menú'" />
+          <AdminIngredients v-if="activeTab === 'Ingredientes'" />
+          <AdminReservations v-if="activeTab === 'Reservas'" />
+          <AdminInventory v-if="activeTab === 'Inventario'" />
+          <AdminSurveys v-if="activeTab === 'Encuestas'" />
         </div>
       </div>
     </div>
@@ -84,17 +73,23 @@ import { useUserStore } from '@stores/userStore';
 import { useToast } from '../../composables/useToast';
 import { formatPrice } from '@utils/formatters';
 import AdminOrders from './AdminOrders.vue';
+import AdminMenu from './AdminMenu.vue';
+import AdminIngredients from './AdminIngredients.vue';
 import AdminReservations from './AdminReservations.vue';
+import AdminInventory from './AdminInventory.vue';
 import AdminSurveys from './AdminSurveys.vue';
 
 const adminStore = useAdminStore();
 const userStore = useUserStore();
 const toast = useToast();
 const activeTab = ref('Órdenes');
-const tabs = ['Órdenes', 'Reservas', 'Encuestas', 'Inventario'];
+const tabs = ['Órdenes', 'Menú', 'Ingredientes', 'Reservas', 'Inventario', 'Encuestas'];
+const statsLoading = ref(false);
 
 onMounted(async () => {
+  statsLoading.value = true;
   await adminStore.fetchDashboardStats();
+  statsLoading.value = false;
   if (adminStore.error) {
     toast.error(adminStore.error);
     adminStore.error = null;

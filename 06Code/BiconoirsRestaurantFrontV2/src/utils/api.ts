@@ -19,6 +19,10 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    const userId = localStorage.getItem('user_id');
+    if (userId) {
+      config.headers['x-user-id'] = userId;
+    }
     return config;
   },
   (error) => Promise.reject(error)

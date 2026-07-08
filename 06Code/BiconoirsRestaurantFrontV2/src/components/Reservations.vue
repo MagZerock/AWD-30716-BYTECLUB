@@ -20,7 +20,17 @@
               <input
                 id="date"
                 v-model="formData.date"
-                type="datetime-local"
+                type="date"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="time">Hora</label>
+              <input
+                id="time"
+                v-model="formData.time"
+                type="time"
                 required
               />
             </div>
@@ -79,7 +89,7 @@
               </div>
 
               <div class="res-details">
-                <p><strong>Hora:</strong> {{ formatTime(res.reservation_date) }}</p>
+                <p><strong>Hora:</strong> {{ formatTime(res.reservation_time ?? res.reservation_date) }}</p>
                 <p><strong>Personas:</strong> {{ res.party_size }}</p>
                 <p v-if="res.special_requests"><strong>Solicitudes:</strong> {{ res.special_requests }}</p>
               </div>
@@ -114,6 +124,7 @@ const toast = useToast();
 
 const formData = ref({
   date: '',
+  time: '',
   partySize: 2,
   requests: ''
 });
@@ -130,14 +141,15 @@ const getStatusClass = (status: string) => {
 
 const handleCreateReservation = async () => {
   const success = await reservationsStore.createReservation(
-    new Date(formData.value.date).toISOString(),
+    formData.value.date,
+    formData.value.time,
     formData.value.partySize,
     formData.value.requests
   );
 
   if (success) {
     toast.success('¡Reserva creada exitosamente!');
-    formData.value = { date: '', partySize: 2, requests: '' };
+    formData.value = { date: '', time: '', partySize: 2, requests: '' };
   } else if (reservationsStore.error) {
     toast.error(reservationsStore.error);
     reservationsStore.error = null;

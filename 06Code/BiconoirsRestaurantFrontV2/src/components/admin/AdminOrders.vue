@@ -33,23 +33,28 @@
       <tbody>
         <tr v-for="order in adminStore.orders" :key="order.order_id">
           <td>{{ order.order_id.slice(0, 8) }}</td>
-          <td>{{ order.customer?.name }}</td>
+          <td>{{ order.customer?.name || order.customer?.email || order.customer_id?.slice(0, 8) || '-' }}</td>
           <td>{{ formatPrice(order.total_amount) }}</td>
           <td>
-            <select
-              :value="order.status"
-              @change="(e) => updateStatus(order.order_id, (e.target as HTMLSelectElement).value)"
-              class="status-select"
-            >
-              <option value="Pending">Pendiente</option>
-              <option value="Confirmed">Confirmado</option>
-              <option value="Completed">Completado</option>
-              <option value="Cancelled">Cancelado</option>
-            </select>
+            <span :class="['status-badge', statusClass(order.status)]">{{ statusLabel(order.status) }}</span>
           </td>
           <td>{{ formatDate(order.created_at) }}</td>
-          <td>
-            <button class="view-btn">Ver</button>
+          <td class="actions">
+            <button
+              v-if="canConfirm(order.status)"
+              @click="updateStatus(order.order_id, 'Confirmed')"
+              class="btn-sm btn-confirm"
+            >✓ Confirmar</button>
+            <button
+              v-if="canComplete(order.status)"
+              @click="updateStatus(order.order_id, 'Completed')"
+              class="btn-sm btn-complete"
+            >✓ Completar</button>
+            <button
+              v-if="canCancel(order.status)"
+              @click="updateStatus(order.order_id, 'Cancelled')"
+              class="btn-sm btn-danger"
+            >✕ Cancelar</button>
           </td>
         </tr>
       </tbody>
@@ -58,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useAdminStore } from '@stores/adminStore';
 import { useToast } from '../../composables/useToast';
 import { formatPrice, formatDate } from '@utils/formatters';
@@ -67,8 +72,12 @@ const adminStore = useAdminStore();
 const toast = useToast();
 const selectedStatus = ref('');
 
+onMounted(() => {
+  loadOrders();
+});
+
 const loadOrders = async () => {
-  await adminStore.fetchAllOrders(selectedStatus.value);
+  await adminStore.fetchAllOrders(selectedStatus.value || undefined);
   if (adminStore.error) {
     toast.error(adminStore.error);
     adminStore.error = null;
@@ -78,12 +87,22 @@ const loadOrders = async () => {
 const updateStatus = async (orderId: string, status: string) => {
   const success = await adminStore.updateOrderStatus(orderId, status);
   if (success) {
-    toast.success('Estado actualizado');
+    toast.success(`Orden ${status === 'Confirmed' ? 'confirmada' : status === 'Completed' ? 'completada' : 'cancelada'}`);
   } else if (adminStore.error) {
     toast.error(adminStore.error);
     adminStore.error = null;
   }
 };
+
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+const statusLabel = (s: string) => {
+  const m: Record<string, string> = { pending: 'Pendiente', confirmed: 'Confirmado', completed: 'Completado', cancelled: 'Cancelado' };
+  return m[s?.toLowerCase()] || s;
+};
+const statusClass = (s: string) => s?.toLowerCase() || '';
+const canConfirm = (s: string) => ['pending', 'pendiente'].includes(s?.toLowerCase());
+const canComplete = (s: string) => ['confirmed', 'confirmada', 'confirmado'].includes(s?.toLowerCase());
+const canCancel = (s: string) => !['completed', 'completada', 'completado', 'cancelled', 'cancelada', 'cancelado'].includes(s?.toLowerCase());
 </script>
 
 <style scoped>
@@ -152,13 +171,21 @@ const updateStatus = async (orderId: string, status: string) => {
   border-radius: 4px;
 }
 
-.view-btn {
-  padding: 0.25rem 0.75rem;
-  background-color: #27ae60;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
+.status-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
+
+.status-badge.pending { background: #fef9e7; color: #f39c12; }
+.status-badge.confirmed { background: #e8f0fe; color: #2980b9; }
+.status-badge.completed { background: #e8f8e8; color: #27ae60; }
+.status-badge.cancelled { background: #fde8e8; color: #e74c3c; }
+
+.actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.btn-sm { padding: 0.3rem 0.6rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; white-space: nowrap; }
+.btn-confirm { background: #27ae60; color: #fff; }
+.btn-complete { background: #3498db; color: #fff; }
+.btn-danger { background: #e74c3c; color: #fff; }
 </style>

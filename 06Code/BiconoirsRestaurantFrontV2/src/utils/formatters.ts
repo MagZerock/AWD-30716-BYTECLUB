@@ -37,28 +37,28 @@ export const formatTime = (date: string | Date): string => {
 
 export const getStatusColor = (status: string): string => {
   const colors: { [key: string]: string } = {
-    'Pending': 'yellow',
-    'Pendiente': 'yellow',
-    'Confirmed': 'blue',
-    'Confirmada': 'blue',
-    'Completed': 'green',
-    'Completada': 'green',
-    'Cancelled': 'red',
-    'Cancelada': 'red'
+    'pending': 'yellow',
+    'confirmed': 'blue',
+    'completed': 'green',
+    'cancelled': 'red',
   };
-  return colors[status] || 'gray';
+  return colors[status.toLowerCase()] || 'gray';
 };
 
 export const getStatusLabel = (status: string): string => {
   const labels: { [key: string]: string } = {
+    'pending': 'Pendiente',
     'Pending': 'Pendiente',
     'Pendiente': 'Pendiente',
+    'confirmed': 'Confirmada',
     'Confirmed': 'Confirmada',
     'Confirmada': 'Confirmada',
+    'completed': 'Completada',
     'Completed': 'Completada',
     'Completada': 'Completada',
+    'cancelled': 'Cancelada',
     'Cancelled': 'Cancelada',
-    'Cancelada': 'Cancelada'
+    'Cancelada': 'Cancelada',
   };
-  return labels[status] || status;
+  return labels[status.toLowerCase()] || status;
 };
