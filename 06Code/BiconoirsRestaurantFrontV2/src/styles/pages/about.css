@@ -59,6 +59,37 @@ h2 {
 	color: var(--text-secondary);
 }
 
+
+
+.map-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 16px 30px rgba(17, 24, 39, 0.08);
+  border: 1px solid var(--border);
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.directions-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.directions-link:hover {
+  text-decoration: underline;
+}
+
+
+
 @media (max-width: 768px) {
 	.about-container {
 		padding: 1.5rem 0 2rem;
