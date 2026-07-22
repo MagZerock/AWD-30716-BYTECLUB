@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-DOMAIN="${1:-biconoirs-bussiness.duckdns.org}"
+DOMAIN="${1:-biconoirs-business.duckdns.org}"
 APP_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "=== Installing system dependencies ==="

@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    const { password, phone, ...rest } = body;
+    const { password, passwordHash, phone, ...rest } = body;
 
     const result = await layerA.post<{
       message: string;
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
       };
     }>("/auth/register", {
       ...rest,
-      passwordHash: password,
+      passwordHash: passwordHash || password,
       ...(phone ? { phone } : {}),
     });
 
