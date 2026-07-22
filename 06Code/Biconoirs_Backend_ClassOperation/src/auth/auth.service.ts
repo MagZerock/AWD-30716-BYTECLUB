@@ -1,6 +1,5 @@
 import * as crypto from "crypto";
 import { Injectable, ConflictException, UnauthorizedException, NotFoundException } from "@nestjs/common";
-import { OAuth2Client } from "google-auth-library";
 import { PrismaService } from "../prisma/prisma.service";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
@@ -8,8 +7,6 @@ import { RefreshDto } from "./dto/refresh.dto";
 import { ForgotPasswordDto } from "./dto/forgot-password.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { hashPassword, comparePasswords, signJwt } from "./jwt.helper";
-
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 @Injectable()
 export class AuthService {
@@ -113,75 +110,6 @@ export class AuthService {
 
     return {
       message: "Login successful",
-      data: {
-        accessToken,
-        refreshToken,
-        expiresIn: 3600,
-        user: {
-          userId: user.userId,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        },
-      },
-    };
-  }
-
-  async googleLogin(idToken: string) {
-    let payload: { email: string; name: string; sub: string };
-
-    try {
-      const ticket = await googleClient.verifyIdToken({
-        idToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      const googleUser = ticket.getPayload();
-      if (!googleUser?.email) {
-        throw new UnauthorizedException({ message: "Invalid Google token", data: null });
-      }
-      payload = { email: googleUser.email, name: googleUser.name ?? "", sub: googleUser.sub };
-    } catch {
-      throw new UnauthorizedException({ message: "Invalid or expired Google token", data: null });
-    }
-
-    let user = await this.prisma.user.findUnique({ where: { email: payload.email } });
-
-    if (!user) {
-      user = await this.prisma.user.create({
-        data: {
-          userId: crypto.randomUUID(),
-          name: payload.name,
-          email: payload.email,
-          passwordHash: null,
-          phone: null,
-          preferences: {},
-        },
-      });
-    }
-
-    const refreshToken = crypto.randomUUID();
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7);
-
-    const session = await this.prisma.userSession.create({
-      data: {
-        userId: user.userId,
-        refreshToken,
-        expiresAt,
-      },
-    });
-
-    const accessToken = signJwt(
-      {
-        userId: user.userId,
-        role: user.role,
-        sessionId: Number(session.sessionId),
-      },
-      3600,
-    );
-
-    return {
-      message: "Google login successful",
       data: {
         accessToken,
         refreshToken,

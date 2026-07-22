@@ -21,11 +21,6 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
-  @Post("google")
-  googleLogin(@Body() body: { token: string }) {
-    return this.authService.googleLogin(body.token);
-  }
-
   @Post("refresh")
   refresh(@Body() dto: RefreshDto) {
     return this.authService.refresh(dto);

@@ -95,26 +95,6 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
-  const loginWithGoogle = async (credential: string) => {
-    isLoading.value = true;
-    error.value = null;
-    try {
-      const response = await apiBff.post('/auth/google', { token: credential });
-      const payload = response.data.data ?? response.data;
-      const accessToken = payload.token;
-      const userData = payload.user;
-      setToken(accessToken);
-      user.value = mapUserFromApi(userData);
-      saveUserId(userData.userId ?? userData.user_id);
-      return true;
-    } catch (err: any) {
-      error.value = err.message || 'Error al iniciar sesión con Google';
-      return false;
-    } finally {
-      isLoading.value = false;
-    }
-  };
-
   const logout = async () => {
     try {
       await apiBff.post('/auth/logout');
@@ -153,7 +133,6 @@ export const useUserStore = defineStore('user', () => {
     isAdmin,
     login,
     register,
-    loginWithGoogle,
     logout,
     getCurrentUser
   };

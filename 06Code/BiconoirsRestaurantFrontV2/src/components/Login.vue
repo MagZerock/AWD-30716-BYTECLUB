@@ -40,22 +40,15 @@
       <div class="signup-link">
         ¿No tienes cuenta? <router-link to="/register">Regístrate aquí</router-link>
       </div>
-
-      <div class="divider">
-        <span>o</span>
-      </div>
-
-      <div id="google-signin-btn" class="google-btn-container"></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../stores/userStore';
 import { useToast } from '../composables/useToast';
-import { useGoogleAuth } from '../composables/useGoogleAuth';
 import { validateEmail, validatePassword } from '../utils/validators';
 
 const email = ref('');
@@ -63,27 +56,6 @@ const password = ref('');
 const userStore = useUserStore();
 const router = useRouter();
 const toast = useToast();
-
-const { isReady, renderButton } = useGoogleAuth(async (credential) => {
-  const success = await userStore.loginWithGoogle(credential);
-  if (success) {
-    toast.success('Inicio de sesión con Google exitoso');
-    router.push('/');
-  } else if (userStore.error) {
-    toast.error(userStore.error);
-    userStore.error = null;
-  }
-});
-
-onMounted(() => {
-  const interval = setInterval(() => {
-    const el = document.getElementById('google-signin-btn');
-    if (isReady.value && el) {
-      renderButton(el);
-      clearInterval(interval);
-    }
-  }, 100);
-});
 
 const handleLogin = async () => {
   if (!email.value || !password.value) {
