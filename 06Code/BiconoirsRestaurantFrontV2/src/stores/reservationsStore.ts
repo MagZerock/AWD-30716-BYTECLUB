@@ -5,6 +5,7 @@ import { apiBff } from '../utils/api';
 export const useReservationsStore = defineStore('reservations', () => {
   const reservations = ref<any[]>([]);
   const isLoading = ref(false);
+  const isCreating = ref(false);
   const error = ref<string | null>(null);
 
   const mapReservation = (r: any) => ({
@@ -37,7 +38,7 @@ export const useReservationsStore = defineStore('reservations', () => {
     party_size: number,
     special_requests?: string
   ) => {
-    isLoading.value = true;
+    isCreating.value = true;
     error.value = null;
     try {
       const response = await apiBff.post('/reservations', {
@@ -52,7 +53,7 @@ export const useReservationsStore = defineStore('reservations', () => {
       error.value = err.response?.data?.error || 'Error al crear la reserva';
       return false;
     } finally {
-      isLoading.value = false;
+      isCreating.value = false;
     }
   };
 
@@ -75,9 +76,10 @@ export const useReservationsStore = defineStore('reservations', () => {
   return {
     reservations,
     isLoading,
+    isCreating,
     error,
     fetchReservations,
     createReservation,
     cancelReservation,
   };
-};
+});

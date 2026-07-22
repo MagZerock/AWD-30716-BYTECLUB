@@ -10,29 +10,51 @@ export const formatPrice = (price: number | string): string => {
 };
 
 export const formatDate = (date: string | Date): string => {
-  return new Intl.DateTimeFormat('es-CO', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(new Date(date));
+  if (!date) return '';
+  try {
+    return new Intl.DateTimeFormat('es-CO', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(new Date(date));
+  } catch (e) {
+    return String(date);
+  }
 };
 
 export const formatDateTime = (date: string | Date): string => {
-  return new Intl.DateTimeFormat('es-CO', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(new Date(date));
+  if (!date) return '';
+  try {
+    return new Intl.DateTimeFormat('es-CO', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(new Date(date));
+  } catch (e) {
+    return String(date);
+  }
 };
 
 export const formatTime = (date: string | Date): string => {
-  return new Intl.DateTimeFormat('es-CO', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true
-  }).format(new Date(date));
+  if (!date) return '';
+  try {
+    let d = date;
+    if (typeof d === 'string' && /^\d{1,2}:\d{2}(:\d{2})?$/.test(d)) {
+      const parts = d.split(':');
+      const tempDate = new Date();
+      tempDate.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10), 0, 0);
+      d = tempDate;
+    }
+    return new Intl.DateTimeFormat('es-CO', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    }).format(new Date(d));
+  } catch (e) {
+    return String(date);
+  }
 };
 
 export const getStatusColor = (status: string): string => {

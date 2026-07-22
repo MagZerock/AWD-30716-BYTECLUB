@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import apiClient from '../utils/api';
+import { useUserStore } from '../stores/userStore';
 
 const mapOrderFromApi = (o: any): any => ({
   order_id: o.orderId ?? o.order_id,
@@ -31,12 +32,18 @@ export const useOrders = () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const userId = localStorage.getItem('user_id');
+      const userStore = useUserStore();
+      const userId = userStore.user?.user_id;
+      const role = userStore.user?.role;
+      
       const response = await apiClient.get('/orders');
       const all = (response.data.data ?? []).map(mapOrderFromApi);
-      orders.value = all.filter(
-        (o: any) => o.customer_id === userId
-      );
+      
+      if (role === 'admin') {
+        orders.value = all;
+      } else {
+        orders.value = all.filter((o: any) => o.customer_id === userId);
+      }
     } catch (err: any) {
       error.value = err.response?.data?.error || 'Error al cargar las órdenes';
     } finally {

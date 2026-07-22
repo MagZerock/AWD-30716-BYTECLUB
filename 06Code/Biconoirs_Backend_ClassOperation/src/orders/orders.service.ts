@@ -8,8 +8,9 @@ import { UpdateOrderDto } from "./dto/update-order.dto";
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll() {
-    return this.prisma.order.findMany({ include: { user: true } });
+  async findAll(user: any) {
+    const where = user.role === "admin" ? {} : { userId: user.userId };
+    return this.prisma.order.findMany({ where, include: { user: true }, orderBy: { createdAt: "desc" } });
   }
 
   async findOne(orderId: string) {

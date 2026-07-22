@@ -1,3 +1,4 @@
+import { NextRequest } from "next/server";
 import { ApiError } from "./api-error";
 
 const LAYER_A_BASE = process.env.LAYER_A_URL || "https://biconoirs-class-op.duckdns.org/ops";
@@ -42,19 +43,36 @@ async function layerAFetch<T>(path: string, options: FetchOptions = {}): Promise
   return JSON.parse(text);
 }
 
-export const layerA = {
-  get: <T>(path: string, options?: FetchOptions) =>
-    layerAFetch<T>(path, { ...options, method: "GET" }),
+function mergeHeaders(base: Record<string, string>, extra?: Record<string, string>): Record<string, string> {
+  return { ...base, ...(extra ?? {}) };
+}
 
-  post: <T>(path: string, body?: unknown, options?: FetchOptions) =>
-    layerAFetch<T>(path, { ...options, method: "POST", body: body ? JSON.stringify(body) : undefined }),
+function authHeaders(request: NextRequest): Record<string, string> {
+  const auth = request.headers.get("authorization");
+  return auth ? { Authorization: auth } : {};
+}
 
-  put: <T>(path: string, body?: unknown, options?: FetchOptions) =>
-    layerAFetch<T>(path, { ...options, method: "PUT", body: body ? JSON.stringify(body) : undefined }),
+function createClient(baseHeaders: Record<string, string>) {
+  return {
+    get: <T>(path: string, options?: FetchOptions) =>
+      layerAFetch<T>(path, { ...options, method: "GET", headers: mergeHeaders(baseHeaders, options?.headers as Record<string, string>) }),
 
-  patch: <T>(path: string, body?: unknown, options?: FetchOptions) =>
-    layerAFetch<T>(path, { ...options, method: "PATCH", body: body ? JSON.stringify(body) : undefined }),
+    post: <T>(path: string, body?: unknown, options?: FetchOptions) =>
+      layerAFetch<T>(path, { ...options, method: "POST", body: body ? JSON.stringify(body) : undefined, headers: mergeHeaders(baseHeaders, options?.headers as Record<string, string>) }),
 
-  delete: <T>(path: string, options?: FetchOptions) =>
-    layerAFetch<T>(path, { ...options, method: "DELETE" }),
-};
+    put: <T>(path: string, body?: unknown, options?: FetchOptions) =>
+      layerAFetch<T>(path, { ...options, method: "PUT", body: body ? JSON.stringify(body) : undefined, headers: mergeHeaders(baseHeaders, options?.headers as Record<string, string>) }),
+
+    patch: <T>(path: string, body?: unknown, options?: FetchOptions) =>
+      layerAFetch<T>(path, { ...options, method: "PATCH", body: body ? JSON.stringify(body) : undefined, headers: mergeHeaders(baseHeaders, options?.headers as Record<string, string>) }),
+
+    delete: <T>(path: string, options?: FetchOptions) =>
+      layerAFetch<T>(path, { ...options, method: "DELETE", headers: mergeHeaders(baseHeaders, options?.headers as Record<string, string>) }),
+  };
+}
+
+export const layerA = createClient({});
+
+export function createLayerA(request: NextRequest) {
+  return createClient(authHeaders(request));
+}

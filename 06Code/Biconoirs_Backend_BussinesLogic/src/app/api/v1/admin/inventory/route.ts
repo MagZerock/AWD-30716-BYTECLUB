@@ -1,11 +1,13 @@
-import { NextRequest } from "next/server"; import { jsonResponse } from "@/lib/json-response"; import { jsonResponse } from "@/lib/json-response";
-import { layerA } from "@/lib/layer-a";
+import { NextRequest } from "next/server";
+import { jsonResponse } from "@/lib/json-response";
+import { createLayerA } from "@/lib/layer-a";
 import { authenticateAdmin } from "@/lib/auth";
 import { errorResponse } from "@/lib/api-error";
 
 export async function GET(request: NextRequest) {
   try {
     await authenticateAdmin(request);
+    const layerA = createLayerA(request);
 
     const inventory = await layerA.get<any[]>("/inventory");
 
@@ -19,6 +21,7 @@ export async function POST(request: NextRequest) {
   try {
     await authenticateAdmin(request);
     const body = await request.json();
+    const layerA = createLayerA(request);
 
     const result = await layerA.post("/inventory", body);
 
@@ -33,6 +36,7 @@ export async function PUT(request: NextRequest) {
     await authenticateAdmin(request);
     const body = await request.json();
     const inventoryId = body.inventory_id ?? body.inventoryId;
+    const layerA = createLayerA(request);
 
     if (!inventoryId) {
       return jsonResponse(
@@ -54,6 +58,7 @@ export async function PATCH(request: NextRequest) {
     await authenticateAdmin(request);
     const body = await request.json();
     const inventoryId = body.inventory_id ?? body.inventoryId;
+    const layerA = createLayerA(request);
 
     if (!inventoryId) {
       return jsonResponse(
@@ -75,6 +80,7 @@ export async function DELETE(request: NextRequest) {
     await authenticateAdmin(request);
     const body = await request.json();
     const inventoryId = body.inventory_id ?? body.inventoryId;
+    const layerA = createLayerA(request);
 
     if (!inventoryId) {
       return jsonResponse(

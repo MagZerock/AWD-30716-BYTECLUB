@@ -59,10 +59,10 @@
 
             <button
               type="submit"
-              :disabled="reservationsStore.isLoading"
+              :disabled="reservationsStore.isCreating"
               class="submit-btn"
             >
-              {{ reservationsStore.isLoading ? 'Creando...' : 'Crear Reserva' }}
+              {{ reservationsStore.isCreating ? 'Creando...' : 'Crear Reserva' }}
             </button>
           </form>
         </div>

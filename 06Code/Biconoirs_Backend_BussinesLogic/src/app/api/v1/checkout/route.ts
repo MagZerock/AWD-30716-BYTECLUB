@@ -1,5 +1,6 @@
-import { NextRequest } from "next/server"; import { jsonResponse } from "@/lib/json-response"; import { jsonResponse } from "@/lib/json-response";
-import { layerA } from "@/lib/layer-a";
+import { NextRequest } from "next/server";
+import { jsonResponse } from "@/lib/json-response";
+import { createLayerA } from "@/lib/layer-a";
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/auth";
 import { errorResponse, ApiError } from "@/lib/api-error";
@@ -8,15 +9,10 @@ export async function POST(request: NextRequest) {
   try {
     const { userId } = await authenticate(request);
     const body = await request.json();
+    const layerA = createLayerA(request);
 
-    // 1. Fetch the user's current cart
-    const cart = await layerA.get<{
-      items?: Array<Record<string, unknown>>;
-    }>("/cart", {
-      params: { user_id: userId },
-    });
-
-    const items = cart.items ?? [];
+    const items = body.items && body.items.length ? body.items : [];
+    
     if (!items.length) {
       throw new ApiError(400, "Cart is empty");
     }
@@ -63,10 +59,18 @@ export async function POST(request: NextRequest) {
       user_id: userId,
       status: "pending",
       items,
+    }, {
+      headers: {
+        Authorization: request.headers.get("authorization") || "",
+      }
     });
 
-    // 4. Clear the cart
-    await layerA.delete("/cart");
+    // 4. Clear the cart (if it exists on backend)
+    try {
+      await layerA.delete("/cart", { params: { user_id: userId } });
+    } catch (e) {
+      console.warn("Could not delete remote cart, continuing...");
+    }
 
     return jsonResponse((order), { status: 201 });
   } catch (error) {

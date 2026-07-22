@@ -1,5 +1,6 @@
-import { NextRequest } from "next/server"; import { jsonResponse } from "@/lib/json-response"; import { jsonResponse } from "@/lib/json-response";
-import { layerA } from "@/lib/layer-a";
+import { NextRequest } from "next/server";
+import { jsonResponse } from "@/lib/json-response";
+import { createLayerA } from "@/lib/layer-a";
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/auth";
 import { errorResponse } from "@/lib/api-error";
@@ -7,17 +8,14 @@ import { errorResponse } from "@/lib/api-error";
 export async function GET(request: NextRequest) {
   try {
     const auth = await authenticate(request);
+    const layerA = createLayerA(request);
 
     const identity = await layerA.get<{
       user_id: string;
       name: string;
       email: string;
       role: string;
-    }>("/auth/me", {
-      headers: {
-        Authorization: `Bearer ${request.headers.get("authorization")?.slice(7)}`,
-      },
-    });
+    }>("/auth/me");
 
     const user = await prisma.user.findUnique({
       where: { userId: auth.userId },
@@ -41,6 +39,7 @@ export async function PUT(request: NextRequest) {
   try {
     const { userId } = await authenticate(request);
     const body = await request.json();
+    const layerA = createLayerA(request);
 
     const result = await layerA.put(`/customers/${userId}`, body);
 
