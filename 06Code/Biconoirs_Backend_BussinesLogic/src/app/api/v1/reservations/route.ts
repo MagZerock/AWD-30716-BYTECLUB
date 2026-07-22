@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/auth";
 import { errorResponse, generateId } from "@/lib/api-error";
+import { serialize } from "@/lib/serialize";
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
       include: { user: true },
     });
 
-    return NextResponse.json(reservation, { status: 201 });
+    return NextResponse.json(serialize(reservation), { status: 201 });
   } catch (error) {
     return errorResponse(error, "Failed to create reservation");
   }
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
       orderBy: { reservationDate: "desc" },
     });
 
-    return NextResponse.json(reservations);
+    return NextResponse.json(serialize(reservations));
   } catch (error) {
     return errorResponse(error, "Failed to fetch reservations");
   }

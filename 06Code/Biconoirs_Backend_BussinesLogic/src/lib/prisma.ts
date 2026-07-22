@@ -1,6 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
+// Ensure BigInt can be serialized to JSON globally
+if (!BigInt.prototype.toJSON) {
+  BigInt.prototype.toJSON = function () {
+    return this.toString();
+  };
+}
+
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 function createPrismaClient(): PrismaClient {

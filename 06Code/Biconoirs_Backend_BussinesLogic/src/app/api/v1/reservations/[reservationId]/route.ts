@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/auth";
 import { errorResponse, ApiError } from "@/lib/api-error";
+import { serialize } from "@/lib/serialize";
 
 export async function PUT(
   request: NextRequest,
@@ -38,7 +39,7 @@ export async function PUT(
       include: { user: true },
     });
 
-    return NextResponse.json(reservation);
+    return NextResponse.json(serialize(reservation));
   } catch (error) {
     return errorResponse(error, "Failed to update reservation");
   }
@@ -79,7 +80,7 @@ export async function PATCH(
       include: { user: true },
     });
 
-    return NextResponse.json(reservation);
+    return NextResponse.json(serialize(reservation));
   } catch (error) {
     return errorResponse(error, "Failed to partially update reservation");
   }
@@ -116,7 +117,7 @@ export async function DELETE(
       include: { user: true },
     });
 
-    return NextResponse.json(updated);
+    return NextResponse.json(serialize(updated));
   } catch (error) {
     return errorResponse(error, "Failed to delete reservation");
   }
