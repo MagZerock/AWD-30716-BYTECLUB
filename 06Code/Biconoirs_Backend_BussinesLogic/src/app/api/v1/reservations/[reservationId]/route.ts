@@ -24,14 +24,18 @@ export async function PUT(
       throw new ApiError(403, "Not authorized to modify this reservation");
     }
 
+    const data: Record<string, unknown> = {};
+
+    if (body.reservation_date) data.reservationDate = new Date(body.reservation_date);
+    if (body.reservation_time) data.reservationTime = body.reservation_time;
+    if (body.party_size) data.partySize = body.party_size;
+    if (body.special_requests !== undefined) data.specialRequests = body.special_requests;
+    if (body.status) data.status = body.status;
+
     const reservation = await prisma.reservation.update({
       where: { reservationId },
-      data: {
-        reservationDate: new Date(body.reservation_date),
-        reservationTime: body.reservation_time,
-        partySize: body.party_size,
-        specialRequests: body.special_requests ?? null,
-      },
+      data,
+      include: { user: true },
     });
 
     return NextResponse.json(reservation);
@@ -72,6 +76,7 @@ export async function PATCH(
     const reservation = await prisma.reservation.update({
       where: { reservationId },
       data,
+      include: { user: true },
     });
 
     return NextResponse.json(reservation);
@@ -103,9 +108,15 @@ export async function DELETE(
     await prisma.reservation.update({
       where: { reservationId },
       data: { status: "cancelled" },
+      include: { user: true },
     });
 
-    return NextResponse.json({ message: "Reservation cancelled" });
+    const updated = await prisma.reservation.findUnique({
+      where: { reservationId },
+      include: { user: true },
+    });
+
+    return NextResponse.json(updated);
   } catch (error) {
     return errorResponse(error, "Failed to delete reservation");
   }

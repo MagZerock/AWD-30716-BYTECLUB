@@ -58,7 +58,6 @@
           <AdminMenu v-if="activeTab === 'Menú'" />
           <AdminIngredients v-if="activeTab === 'Ingredientes'" />
           <AdminReservations v-if="activeTab === 'Reservas'" />
-          <AdminInventory v-if="activeTab === 'Inventario'" />
           <AdminSurveys v-if="activeTab === 'Encuestas'" />
         </div>
       </div>
@@ -76,14 +75,13 @@ import AdminOrders from './AdminOrders.vue';
 import AdminMenu from './AdminMenu.vue';
 import AdminIngredients from './AdminIngredients.vue';
 import AdminReservations from './AdminReservations.vue';
-import AdminInventory from './AdminInventory.vue';
 import AdminSurveys from './AdminSurveys.vue';
 
 const adminStore = useAdminStore();
 const userStore = useUserStore();
 const toast = useToast();
 const activeTab = ref('Órdenes');
-const tabs = ['Órdenes', 'Menú', 'Ingredientes', 'Reservas', 'Inventario', 'Encuestas'];
+const tabs = ['Órdenes', 'Menú', 'Ingredientes', 'Reservas', 'Encuestas'];
 const statsLoading = ref(false);
 
 onMounted(async () => {

@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
         specialRequests: body.special_requests ?? null,
         status: "pending",
       },
+      include: { user: true },
     });
 
     return NextResponse.json(reservation, { status: 201 });

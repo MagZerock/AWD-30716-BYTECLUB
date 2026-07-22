@@ -8,11 +8,35 @@ export async function GET(request: NextRequest) {
   try {
     await authenticate(request);
 
-    const surveys = await prisma.survey.findMany({
-      include: { responses: { include: { user: true } } },
+    const responses = await prisma.surveyResponse.findMany({
+      include: { user: true, survey: true },
+      orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(serialize(surveys));
+    const grouped = new Map<string, any>();
+
+    for (const r of responses) {
+      const key = `${r.surveyId}-${r.userId}-${r.createdAt.toISOString()}`;
+      if (!grouped.has(key)) {
+        grouped.set(key, {
+          survey_id: r.surveyId,
+          survey_title: r.survey?.title,
+          customer: r.user,
+          rating: 0,
+          comments: "",
+          submitted_at: r.createdAt,
+        });
+      }
+      const entry = grouped.get(key);
+      const num = Number(r.answer);
+      if (!isNaN(num) && num >= 1 && num <= 5) {
+        entry.rating = num;
+      } else {
+        entry.comments = entry.comments ? `${entry.comments}\n${r.answer}` : r.answer;
+      }
+    }
+
+    return NextResponse.json(serialize(Array.from(grouped.values())));
   } catch (error) {
     return errorResponse(error, "Failed to fetch surveys");
   }
