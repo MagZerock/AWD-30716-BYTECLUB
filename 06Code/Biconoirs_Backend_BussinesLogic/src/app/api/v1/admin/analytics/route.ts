@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
     });
 
     const dishIds = topDishes
-      .filter((d) => d.itemId)
-      .map((d) => d.itemId!);
+      .filter((d: (typeof topDishes)[number]) => d.itemId)
+      .map((d: (typeof topDishes)[number]) => d.itemId!);
 
     const dishes = dishIds.length
       ? await prisma.menuItem.findMany({
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
     const dishMap = new Map(dishes.map((d) => [d.itemId, d.name]));
 
-    const topSellingDishes = topDishes.map((d) => ({
+    const topSellingDishes = topDishes.map((d: (typeof topDishes)[number]) => ({
       item_id: d.itemId,
       name: d.itemId ? dishMap.get(d.itemId) ?? "Unknown" : "Unknown",
       total_quantity_sold: Number(d._sum.quantity ?? 0),
