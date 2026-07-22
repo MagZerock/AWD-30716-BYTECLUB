@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server"; import { jsonResponse } from "@/lib/json-response"; import { jsonResponse } from "@/lib/json-response";
 import { layerA } from "@/lib/layer-a";
 import { errorResponse } from "@/lib/api-error";
 
@@ -38,7 +38,7 @@ export async function GET(_request: NextRequest) {
         })),
     }));
 
-    return NextResponse.json({
+    return jsonResponse({
       categories: categorizedMenu,
       total_dishes: dishes.length,
     });

@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server"; import { jsonResponse } from "@/lib/json-response"; import { jsonResponse } from "@/lib/json-response";
 import { prisma } from "@/lib/prisma";
 import { errorResponse } from "@/lib/api-error";
-import { serialize } from "@/lib/serialize";
 
 export async function GET(_request: NextRequest) {
   try {
@@ -16,7 +15,7 @@ export async function GET(_request: NextRequest) {
         prisma.order.count(),
       ]);
 
-    return NextResponse.json(serialize({
+    return jsonResponse(({
       totalOrders,
       totalRevenue: Number(revenueAgg._sum.totalAmount ?? 0),
       pendingOrders: pendingCount,

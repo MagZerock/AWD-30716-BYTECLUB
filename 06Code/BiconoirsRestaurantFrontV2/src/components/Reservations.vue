@@ -112,13 +112,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
-import { useReservations } from '../composables/useReservations';
+import { ref, onMounted } from 'vue';
+import { useReservationsStore } from '../stores/reservationsStore';
 import { useUserStore } from '../stores/userStore';
 import { useToast } from '../composables/useToast';
 import { formatDate, formatTime, getStatusLabel } from '../utils/formatters';
 
-const reservationsStore = reactive(useReservations());
+const reservationsStore = useReservationsStore();
 const userStore = useUserStore();
 const toast = useToast();
 

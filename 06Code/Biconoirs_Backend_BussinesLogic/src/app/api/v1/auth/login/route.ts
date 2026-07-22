@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { layerA } from "@/lib/layer-a";
 import { prisma } from "@/lib/prisma";
 import { errorResponse } from "@/lib/api-error";
-import { serialize } from "@/lib/serialize";
+import { jsonResponse } from "@/lib/json-response";
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(serialize({ token: accessToken, user }));
+    return jsonResponse({ token: accessToken, user });
   } catch (error) {
     return errorResponse(error, "Login failed");
   }

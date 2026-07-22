@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server"; import { jsonResponse } from "@/lib/json-response"; import { jsonResponse } from "@/lib/json-response";
 import { layerA } from "@/lib/layer-a";
 import { authenticate } from "@/lib/auth";
 import { errorResponse } from "@/lib/api-error";
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
         (o.user_id ?? o.userId) === userId,
     );
 
-    return NextResponse.json(userOrders);
+    return jsonResponse(userOrders);
   } catch (error) {
     return errorResponse(error, "Failed to fetch orders");
   }

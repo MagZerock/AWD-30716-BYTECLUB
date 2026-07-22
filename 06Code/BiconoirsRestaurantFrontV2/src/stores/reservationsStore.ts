@@ -1,7 +1,8 @@
+import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { apiBff } from '../utils/api';
 
-export const useReservations = () => {
+export const useReservationsStore = defineStore('reservations', () => {
   const reservations = ref<any[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);

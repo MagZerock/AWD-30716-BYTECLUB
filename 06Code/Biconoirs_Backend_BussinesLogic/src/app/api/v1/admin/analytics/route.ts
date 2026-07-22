@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server"; import { jsonResponse } from "@/lib/json-response"; import { jsonResponse } from "@/lib/json-response";
 import { prisma } from "@/lib/prisma";
 import { authenticateAdmin } from "@/lib/auth";
 import { errorResponse } from "@/lib/api-error";
-import { serialize } from "@/lib/serialize";
 
 export async function GET(request: NextRequest) {
   try {
@@ -60,7 +59,7 @@ export async function GET(request: NextRequest) {
       orderCounts.map((o) => [o.status, o._count.orderId]),
     );
 
-    return NextResponse.json(serialize({
+    return jsonResponse(({
       total_revenue: totalRevenue,
       top_selling_dishes: topSellingDishes,
       orders_by_status: ordersByStatus,

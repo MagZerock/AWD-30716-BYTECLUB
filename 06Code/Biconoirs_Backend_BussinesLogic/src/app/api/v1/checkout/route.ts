@@ -1,9 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server"; import { jsonResponse } from "@/lib/json-response"; import { jsonResponse } from "@/lib/json-response";
 import { layerA } from "@/lib/layer-a";
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/auth";
 import { errorResponse, ApiError } from "@/lib/api-error";
-import { serialize } from "@/lib/serialize";
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,7 +68,7 @@ export async function POST(request: NextRequest) {
     // 4. Clear the cart
     await layerA.delete("/cart");
 
-    return NextResponse.json(serialize(order), { status: 201 });
+    return jsonResponse((order), { status: 201 });
   } catch (error) {
     return errorResponse(error, "Checkout failed");
   }

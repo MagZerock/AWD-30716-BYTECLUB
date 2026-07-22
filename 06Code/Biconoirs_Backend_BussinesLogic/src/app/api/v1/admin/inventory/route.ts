@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server"; import { jsonResponse } from "@/lib/json-response"; import { jsonResponse } from "@/lib/json-response";
 import { layerA } from "@/lib/layer-a";
 import { authenticateAdmin } from "@/lib/auth";
 import { errorResponse } from "@/lib/api-error";
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
 
     const inventory = await layerA.get<any[]>("/inventory");
 
-    return NextResponse.json(inventory);
+    return jsonResponse(inventory);
   } catch (error) {
     return errorResponse(error, "Failed to fetch inventory");
   }
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     const result = await layerA.post("/inventory", body);
 
-    return NextResponse.json(result, { status: 201 });
+    return jsonResponse(result, { status: 201 });
   } catch (error) {
     return errorResponse(error, "Failed to create inventory item");
   }
@@ -35,7 +35,7 @@ export async function PUT(request: NextRequest) {
     const inventoryId = body.inventory_id ?? body.inventoryId;
 
     if (!inventoryId) {
-      return NextResponse.json(
+      return jsonResponse(
         { error: "inventory_id is required" },
         { status: 400 },
       );
@@ -43,7 +43,7 @@ export async function PUT(request: NextRequest) {
 
     const result = await layerA.put(`/inventory/${inventoryId}`, body);
 
-    return NextResponse.json(result);
+    return jsonResponse(result);
   } catch (error) {
     return errorResponse(error, "Failed to update inventory");
   }
@@ -56,7 +56,7 @@ export async function PATCH(request: NextRequest) {
     const inventoryId = body.inventory_id ?? body.inventoryId;
 
     if (!inventoryId) {
-      return NextResponse.json(
+      return jsonResponse(
         { error: "inventory_id is required" },
         { status: 400 },
       );
@@ -64,7 +64,7 @@ export async function PATCH(request: NextRequest) {
 
     const result = await layerA.patch(`/inventory/${inventoryId}`, body);
 
-    return NextResponse.json(result);
+    return jsonResponse(result);
   } catch (error) {
     return errorResponse(error, "Failed to partially update inventory");
   }
@@ -77,7 +77,7 @@ export async function DELETE(request: NextRequest) {
     const inventoryId = body.inventory_id ?? body.inventoryId;
 
     if (!inventoryId) {
-      return NextResponse.json(
+      return jsonResponse(
         { error: "inventory_id is required" },
         { status: 400 },
       );
@@ -85,7 +85,7 @@ export async function DELETE(request: NextRequest) {
 
     await layerA.delete(`/inventory/${inventoryId}`);
 
-    return NextResponse.json({ message: "Inventory item deleted" });
+    return jsonResponse({ message: "Inventory item deleted" });
   } catch (error) {
     return errorResponse(error, "Failed to delete inventory");
   }
