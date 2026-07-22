@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
           Number(link.quantityRequired) * qty;
         const available =
           link.ingredient.inventoryRecords.reduce(
-            (sum, inv) => sum + Number(inv.currentStock),
+            (sum: number, inv: { currentStock: unknown }) => sum + Number(inv.currentStock),
             0,
           );
 
