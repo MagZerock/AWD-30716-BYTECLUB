@@ -9,11 +9,11 @@ export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    return this.prisma.order.findMany();
+    return this.prisma.order.findMany({ include: { user: true } });
   }
 
   async findOne(orderId: string) {
-    return this.prisma.order.findUnique({ where: { orderId } });
+    return this.prisma.order.findUnique({ where: { orderId }, include: { user: true } });
   }
 
   async create(dto: CreateOrderDto) {

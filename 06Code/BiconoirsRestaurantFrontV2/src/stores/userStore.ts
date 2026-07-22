@@ -77,7 +77,7 @@ export const useUserStore = defineStore('user', () => {
       const response = await apiBff.post('/auth/signup', {
         name,
         email,
-        password,
+        passwordHash: password,
         phone
       });
       const payload = response.data.data ?? response.data;

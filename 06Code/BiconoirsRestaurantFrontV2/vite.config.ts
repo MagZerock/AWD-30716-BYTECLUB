@@ -14,7 +14,7 @@ export default defineConfig({
         changeOrigin: true
       },
       '/bff': {
-        target: 'https://biconoirs-bussiness.duckdns.org',
+        target: 'https://biconoirs-business.duckdns.org',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/bff/, ''),
         secure: false

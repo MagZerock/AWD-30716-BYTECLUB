@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
-const BFF_BASE_URL = import.meta.env.VITE_BFF_URL || 'https://biconoirs-bussiness.duckdns.org';
+const BFF_BASE_URL = import.meta.env.VITE_BFF_URL || 'https://biconoirs-business.duckdns.org';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://3.20.57.154:3000/ops';
 
 function createClient(baseURL: string): AxiosInstance {
