@@ -53,10 +53,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 3. Create the order via Layer A
     const order = await layerA.post<any>("/orders", {
       ...body,
-      user_id: userId,
+      userId: userId,
       status: "pending",
       items,
     }, {
