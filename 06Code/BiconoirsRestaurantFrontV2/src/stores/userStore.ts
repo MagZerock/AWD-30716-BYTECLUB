@@ -58,7 +58,7 @@ export const useUserStore = defineStore('user', () => {
       saveUserId(userData.userId ?? userData.user_id);
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al iniciar sesion';
+      error.value = err.message || 'Usuario o contraseña incorrectos';
       return false;
     } finally {
       isLoading.value = false;
@@ -88,7 +88,7 @@ export const useUserStore = defineStore('user', () => {
       saveUserId(userData.userId ?? userData.user_id);
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al registrarse';
+      error.value = err.message || 'Error al registrarse';
       return false;
     } finally {
       isLoading.value = false;
