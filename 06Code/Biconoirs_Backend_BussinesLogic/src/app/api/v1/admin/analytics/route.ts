@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
   try {
     await authenticateAdmin(request);
 
-    // Total revenue from all orders (excluding cancelled)
     const revenueAgg = await prisma.order.aggregate({
       _sum: { totalAmount: true },
       where: { status: { not: "cancelled" } },
@@ -16,7 +15,6 @@ export async function GET(request: NextRequest) {
 
     const totalRevenue = Number(revenueAgg._sum.totalAmount ?? 0);
 
-    // Top-selling dishes using price_at_purchase
     const topDishes = await prisma.orderItem.groupBy({
       by: ["itemId"],
       _sum: { quantity: true },
@@ -25,9 +23,11 @@ export async function GET(request: NextRequest) {
       take: 10,
     });
 
+    type TopDish = (typeof topDishes)[number];
+
     const dishIds = topDishes
-      .filter((d: (typeof topDishes)[number]) => d.itemId)
-      .map((d: (typeof topDishes)[number]) => d.itemId!);
+      .filter((d: TopDish) => d.itemId !== null)
+      .map((d: TopDish) => d.itemId as string);
 
     const dishes = dishIds.length
       ? await prisma.menuItem.findMany({
@@ -36,9 +36,13 @@ export async function GET(request: NextRequest) {
         })
       : [];
 
-    const dishMap = new Map(dishes.map((d: { itemId: string; name: string }) => [d.itemId, d.name]));
+    type Dish = (typeof dishes)[number];
 
-    const topSellingDishes = topDishes.map((d: (typeof topDishes)[number]) => ({
+    const dishMap = new Map<string, string>(
+      dishes.map((d: Dish) => [d.itemId, d.name])
+    );
+
+    const topSellingDishes = topDishes.map((d: TopDish) => ({
       item_id: d.itemId,
       name: d.itemId ? dishMap.get(d.itemId) ?? "Unknown" : "Unknown",
       total_quantity_sold: Number(d._sum.quantity ?? 0),
@@ -50,21 +54,22 @@ export async function GET(request: NextRequest) {
       ),
     }));
 
-    // Order counts by status
     const orderCounts = await prisma.order.groupBy({
       by: ["status"],
       _count: { orderId: true },
     });
 
+    type OrderCount = (typeof orderCounts)[number];
+
     const ordersByStatus = Object.fromEntries(
-      orderCounts.map((o) => [o.status, o._count.orderId]),
+      orderCounts.map((o: OrderCount) => [o.status, o._count.orderId]),
     );
 
     return jsonResponse(({
       total_revenue: totalRevenue,
       top_selling_dishes: topSellingDishes,
       orders_by_status: ordersByStatus,
-      total_orders: orderCounts.reduce((sum, o) => sum + o._count.orderId, 0),
+      total_orders: orderCounts.reduce((sum: number, o: OrderCount) => sum + o._count.orderId, 0),
     }));
   } catch (error) {
     return errorResponse(error, "Failed to fetch analytics");
