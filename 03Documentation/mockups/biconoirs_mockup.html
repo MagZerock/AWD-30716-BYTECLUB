@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Biconoir's Restaurant — Mockup</title>
+<style>
+  :root{
+    --bg:#f6f5f1; --card:#ffffff; --border:#e3e1d9; --border-strong:#c9c6ba;
+    --text:#1f1e1c; --text-2:#65635c; --text-3:#8f8d84;
+    --accent:#0c447c; --accent-bg:#e6f1fb;
+    --success:#27500a; --success-bg:#eaf3de;
+    --warning:#854f0b; --warning-bg:#faeeda;
+    --danger:#791f1f; --danger-bg:#fcebeb;
+    --radius:8px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text)}
+  header{background:var(--card);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+  header .brand{font-weight:600;font-size:18px}
+  nav{display:flex;gap:4px}
+  nav button{background:none;border:none;padding:8px 14px;border-radius:6px;font-size:14px;cursor:pointer;color:var(--text-2)}
+  nav button.active{background:var(--accent-bg);color:var(--accent);font-weight:500}
+  main{max-width:1000px;margin:0 auto;padding:32px 24px}
+  section{display:none}
+  section.active{display:block}
+  h1{font-size:20px;font-weight:600;margin:0 0 4px}
+  .subtitle{color:var(--text-2);font-size:14px;margin:0 0 24px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .thumb{height:90px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:32px}
+  .card h3{font-size:14px;font-weight:600;margin:12px 0 2px}
+  .card p.desc{font-size:12px;color:var(--text-2);margin:0 0 10px;min-height:32px}
+  .price-row{display:flex;justify-content:space-between;align-items:center}
+  .price{font-weight:600;font-size:14px}
+  button.btn{border:1px solid var(--border-strong);background:var(--card);border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+  button.btn:hover{background:var(--bg)}
+  button.btn.primary{background:var(--text);color:#fff;border-color:var(--text)}
+  .badge{font-size:11px;padding:2px 9px;border-radius:20px;display:inline-block}
+  .badge.remove{background:var(--danger-bg);color:var(--danger)}
+  .badge.neutral{background:var(--bg);color:var(--text-2)}
+  .badge.success{background:var(--success-bg);color:var(--success)}
+  .badge.warning{background:var(--warning-bg);color:var(--warning)}
+  .cart-item{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+  .cart-tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+  .totals{padding-top:12px;font-size:14px}
+  .totals .row{display:flex;justify-content:space-between;padding:4px 0}
+  .totals .row.total{font-weight:600;border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
+  form.reserve{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  form.reserve label{font-size:12px;color:var(--text-2);display:block;margin-bottom:4px}
+  form.reserve input, form.reserve select{width:100%;padding:8px 10px;border:1px solid var(--border-strong);border-radius:6px;font-size:14px}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+  .metric{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+  .metric .label{font-size:12px;color:var(--text-2)}
+  .metric .value{font-size:24px;font-weight:600;margin-top:2px}
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:10px 14px}
+  th{color:var(--text-2);font-weight:500;background:var(--bg)}
+  tr+tr td{border-top:1px solid var(--border)}
+  .login-card{max-width:360px;margin:60px auto;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px}
+  .login-card h1{text-align:center}
+  .login-card .subtitle{text-align:center}
+  .role-toggle{display:flex;background:var(--bg);border-radius:8px;padding:3px;margin-bottom:18px}
+  .role-toggle button{flex:1;background:none;border:none;padding:8px;border-radius:6px;font-size:13px;cursor:pointer}
+  .role-toggle button.active{background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.08);font-weight:500}
+  .login-card input{width:100%;padding:10px;margin-bottom:12px;border:1px solid var(--border-strong);border-radius:6px;font-size:14px}
+  .login-card button.submit{width:100%;padding:10px;background:var(--text);color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;margin-top:6px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Biconoir's Restaurant</div>
+  <nav id="nav">
+    <button data-target="login" class="active">Ingreso</button>
+    <button data-target="menu">Menú</button>
+    <button data-target="cart">Carrito</button>
+    <button data-target="reserve">Reservas</button>
+    <button data-target="admin">Admin</button>
+  </nav>
+</header>
+
+<main>
+
+  <section id="login" class="active">
+    <div class="login-card">
+      <h1>Bienvenido</h1>
+      <p class="subtitle">Inicia sesión para continuar</p>
+      <div class="role-toggle">
+        <button class="active">Cliente</button>
+        <button>Administrador</button>
+      </div>
+      <input type="email" placeholder="Correo electrónico">
+      <input type="password" placeholder="Contraseña">
+      <button class="submit" onclick="go('menu')">Iniciar sesión</button>
+    </div>
+  </section>
+
+  <section id="menu">
+    <h1>Menú digital</h1>
+    <p class="subtitle">Productos disponibles según inventario</p>
+    <div class="grid">
+      <div class="card">
+        <div class="thumb" style="background:var(--accent-bg)">🍕</div>
+        <h3>Pizza margarita</h3>
+        <p class="desc">Tomate, mozzarella, albahaca fresca</p>
+        <div class="price-row"><span class="price">$8.50</span><button class="btn primary">Agregar</button></div>
+      </div>
+      <div class="card">
+        <div class="thumb" style="background:var(--warning-bg)">🍔</div>
+        <h3>Hamburguesa clásica</h3>
+        <p class="desc">Res, queso, lechuga, tomate</p>
+        <div class="price-row"><span class="price">$6.90</span><button class="btn primary">Agregar</button></div>
+      </div>
+      <div class="card">
+        <div class="thumb" style="background:var(--success-bg)">🥗</div>
+        <h3>Ensalada César</h3>
+        <p class="desc">Lechuga, pollo, parmesano, aderezo</p>
+        <div class="price-row"><span class="price">$5.20</span><button class="btn primary">Agregar</button></div>
+      </div>
+      <div class="card">
+        <div class="thumb" style="background:var(--danger-bg)">🍝</div>
+        <h3>Pasta boloñesa</h3>
+        <p class="desc">Tallarín, carne, salsa de tomate</p>
+        <div class="price-row"><span class="price">$7.30</span><button class="btn primary">Agregar</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cart">
+    <h1>Carrito y personalización</h1>
+    <p class="subtitle">Elimina ingredientes por alergias o preferencia</p>
+    <div class="card">
+      <div class="cart-item">
+        <div>
+          <h3 style="margin:0">Hamburguesa clásica x1</h3>
+          <div class="cart-tags">
+            <span class="badge remove">✕ sin queso</span>
+            <span class="badge neutral">lechuga</span>
+            <span class="badge neutral">tomate</span>
+          </div>
+        </div>
+        <span class="price">$6.90</span>
+      </div>
+      <div class="cart-item">
+        <div>
+          <h3 style="margin:0">Pizza margarita x1</h3>
+          <div class="cart-tags">
+            <span class="badge neutral">completa</span>
+          </div>
+        </div>
+        <span class="price">$8.50</span>
+      </div>
+      <div class="totals">
+        <div class="row"><span>Subtotal</span><span>$15.40</span></div>
+        <div class="row"><span>Tarifa de servicio</span><span>$1.20</span></div>
+        <div class="row total"><span>Total</span><span>$16.60</span></div>
+      </div>
+      <button class="btn primary" style="margin-top:14px;width:100%">Confirmar pedido</button>
+    </div>
+  </section>
+
+  <section id="reserve">
+    <h1>Reserva de mesa</h1>
+    <p class="subtitle">Selecciona fecha, hora y número de personas</p>
+    <div class="card">
+      <form class="reserve" onsubmit="event.preventDefault()">
+        <div><label>Fecha</label><input type="date"></div>
+        <div><label>Hora</label><input type="time"></div>
+        <div><label>Personas</label><input type="number" min="1" value="2"></div>
+        <div style="display:flex;align-items:flex-end"><button type="submit" class="btn primary" style="width:100%">Confirmar reserva</button></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="admin">
+    <h1>Panel administrativo</h1>
+    <p class="subtitle">Reservas activas y desempeño del día</p>
+    <div class="metrics">
+      <div class="metric"><div class="label">Reservas hoy</div><div class="value">14</div></div>
+      <div class="metric"><div class="label">Ganancia hoy</div><div class="value">$312</div></div>
+      <div class="metric"><div class="label">Stock bajo</div><div class="value">3</div></div>
+    </div>
+    <table>
+      <tr><th>Mesa</th><th>Hora</th><th>Personas</th><th>Estado</th></tr>
+      <tr><td>4</td><td>19:30</td><td>2</td><td><span class="badge success">confirmada</span></td></tr>
+      <tr><td>7</td><td>20:00</td><td>4</td><td><span class="badge warning">pendiente</span></td></tr>
+      <tr><td>2</td><td>21:00</td><td>3</td><td><span class="badge success">confirmada</span></td></tr>
+    </table>
+  </section>
+
+</main>
+
+<script>
+  const buttons = document.querySelectorAll('#nav button');
+  function go(target){
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+    buttons.forEach(b=>b.classList.toggle('active', b.dataset.target===target));
+  }
+  buttons.forEach(b=>b.addEventListener('click', ()=>go(b.dataset.target)));
+</script>
+
+</body>
+</html>
