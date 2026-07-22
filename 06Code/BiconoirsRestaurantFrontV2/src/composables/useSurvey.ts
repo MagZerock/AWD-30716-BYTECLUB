@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import apiClient from '../utils/api';
+import { apiBff } from '../utils/api';
 
 export const useSurvey = () => {
   const isLoading = ref(false);
@@ -9,7 +9,7 @@ export const useSurvey = () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const surveysRes = await apiClient.get('/surveys');
+      const surveysRes = await apiBff.get('/surveys');
       const surveyList: any[] = surveysRes.data.data ?? [];
       const activeSurvey = surveyList.find(
         (s: any) => (s.status ?? 'active') === 'active'
@@ -17,14 +17,14 @@ export const useSurvey = () => {
       const surveyId = activeSurvey?.surveyId ?? activeSurvey?.survey_id;
 
       if (surveyId) {
-        await apiClient.post(`/surveys/${surveyId}/submit`, {
+        await apiBff.post(`/surveys/${surveyId}/respond`, {
           responses: [
             { question_id: 'rating', answer: String(rating) },
             { question_id: 'comments', answer: comments },
           ],
         });
       } else {
-        await apiClient.post('/surveys', { rating, comments });
+        await apiBff.post('/surveys', { rating, comments });
       }
       return true;
     } catch (err: any) {

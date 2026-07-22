@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import apiClient from '../utils/api';
+import { apiBff, apiOps } from '../utils/api';
 
 const mapOrder = (o: any): any => ({
   order_id: o.orderId ?? o.order_id,
@@ -66,10 +66,10 @@ export const useAdminStore = defineStore('admin', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.get('/admin/stats');
+      const response = await apiBff.get('/admin/stats');
       stats.value = response.data.data;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al cargar estadísticas';
+      error.value = err.response?.data?.error || 'Error al cargar estadisticas';
     } finally {
       isLoading.value = false;
     }
@@ -79,12 +79,12 @@ export const useAdminStore = defineStore('admin', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.get('/orders',
+      const response = await apiOps.get('/orders',
         { params: { status, page, limit: 50 } }
       );
       orders.value = (response.data.data ?? []).map(mapOrder);
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al cargar órdenes';
+      error.value = err.response?.data?.error || 'Error al cargar ordenes';
     } finally {
       isLoading.value = false;
     }
@@ -93,7 +93,7 @@ export const useAdminStore = defineStore('admin', () => {
   const updateOrderStatus = async (orderId: string, status: string) => {
     error.value = null;
     try {
-      const response = await apiClient.put(`/orders/${orderId}`, { status });
+      const response = await apiOps.put(`/orders/${orderId}`, { status });
       const index = orders.value.findIndex((o: any) => o.order_id === orderId);
       if (index !== -1) {
         orders.value[index] = mapOrder(response.data.data);
@@ -109,7 +109,7 @@ export const useAdminStore = defineStore('admin', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.get('/reservations',
+      const response = await apiBff.get('/reservations',
         { params: { status, page, limit: 50 } }
       );
       reservations.value = (response.data.data ?? []).map(mapReservation);
@@ -123,7 +123,7 @@ export const useAdminStore = defineStore('admin', () => {
   const updateReservationStatus = async (reservationId: string, status: string) => {
     error.value = null;
     try {
-      const response = await apiClient.put(`/reservations/${reservationId}`, { status });
+      const response = await apiBff.put(`/reservations/${reservationId}`, { status });
       const index = reservations.value.findIndex(
         (r: any) => r.reservation_id === reservationId
       );
@@ -141,7 +141,7 @@ export const useAdminStore = defineStore('admin', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.get('/surveys');
+      const response = await apiBff.get('/surveys');
       surveys.value = (response.data.data ?? []).map(mapSurvey);
     } catch (err: any) {
       error.value = err.response?.data?.error || 'Error al cargar encuestas';
@@ -152,7 +152,7 @@ export const useAdminStore = defineStore('admin', () => {
 
   const fetchDishes = async () => {
     try {
-      const response = await apiClient.get('/menu/dishes');
+      const response = await apiOps.get('/menu/dishes');
       dishes.value = response.data.data ?? [];
     } catch (err: any) {
       error.value = err.response?.data?.error || 'Error al cargar platos';
@@ -162,7 +162,7 @@ export const useAdminStore = defineStore('admin', () => {
   const createDish = async (data: any) => {
     error.value = null;
     try {
-      const response = await apiClient.post('/menu/dishes', data);
+      const response = await apiOps.post('/menu/dishes', data);
       dishes.value.push(response.data.data);
       return true;
     } catch (err: any) {
@@ -174,7 +174,7 @@ export const useAdminStore = defineStore('admin', () => {
   const updateDish = async (dishId: string, data: any) => {
     error.value = null;
     try {
-      const response = await apiClient.put(`/menu/dishes/${dishId}`, data);
+      const response = await apiOps.put(`/menu/dishes/${dishId}`, data);
       const index = dishes.value.findIndex((d: any) => d.itemId === dishId || d.item_id === dishId);
       if (index !== -1) dishes.value[index] = response.data.data;
       return true;
@@ -187,7 +187,7 @@ export const useAdminStore = defineStore('admin', () => {
   const deleteDish = async (dishId: string) => {
     error.value = null;
     try {
-      await apiClient.delete(`/menu/dishes/${dishId}`);
+      await apiOps.delete(`/menu/dishes/${dishId}`);
       dishes.value = dishes.value.filter((d: any) => d.itemId !== dishId && d.item_id !== dishId);
       return true;
     } catch (err: any) {
@@ -198,28 +198,28 @@ export const useAdminStore = defineStore('admin', () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await apiClient.get('/menu/categories');
+      const response = await apiOps.get('/menu/categories');
       categories.value = response.data.data ?? [];
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al cargar categorías';
+      error.value = err.response?.data?.error || 'Error al cargar categorias';
     }
   };
 
   const createCategory = async (data: any) => {
     error.value = null;
     try {
-      const response = await apiClient.post('/menu/categories', data);
+      const response = await apiOps.post('/menu/categories', data);
       categories.value.push(response.data.data);
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al crear categoría';
+      error.value = err.response?.data?.error || 'Error al crear categoria';
       return false;
     }
   };
 
   const fetchIngredients = async () => {
     try {
-      const response = await apiClient.get('/ingredients');
+      const response = await apiOps.get('/ingredients');
       ingredients.value = response.data.data ?? [];
     } catch (err: any) {
       error.value = err.response?.data?.error || 'Error al cargar ingredientes';
@@ -229,7 +229,7 @@ export const useAdminStore = defineStore('admin', () => {
   const createIngredient = async (data: any) => {
     error.value = null;
     try {
-      const response = await apiClient.post('/ingredients', data);
+      const response = await apiOps.post('/ingredients', data);
       ingredients.value.push(response.data.data);
       return true;
     } catch (err: any) {
@@ -241,7 +241,7 @@ export const useAdminStore = defineStore('admin', () => {
   const updateIngredient = async (ingredientId: string, data: any) => {
     error.value = null;
     try {
-      const response = await apiClient.put(`/ingredients/${ingredientId}`, data);
+      const response = await apiOps.put(`/ingredients/${ingredientId}`, data);
       const index = ingredients.value.findIndex(
         (i: any) => i.skuCode === ingredientId || i.sku_code === ingredientId
       );
@@ -256,7 +256,7 @@ export const useAdminStore = defineStore('admin', () => {
   const deleteIngredient = async (ingredientId: string) => {
     error.value = null;
     try {
-      await apiClient.delete(`/ingredients/${ingredientId}`);
+      await apiOps.delete(`/ingredients/${ingredientId}`);
       ingredients.value = ingredients.value.filter(
         (i: any) => i.skuCode !== ingredientId && i.sku_code !== ingredientId
       );
@@ -269,7 +269,7 @@ export const useAdminStore = defineStore('admin', () => {
 
   const fetchInventory = async () => {
     try {
-      const response = await apiClient.get('/inventory');
+      const response = await apiBff.get('/admin/inventory');
       inventory.value = response.data.data ?? [];
     } catch (err: any) {
       error.value = err.response?.data?.error || 'Error al cargar inventario';
@@ -279,11 +279,11 @@ export const useAdminStore = defineStore('admin', () => {
   const createInventoryItem = async (data: any) => {
     error.value = null;
     try {
-      const response = await apiClient.post('/inventory', data);
+      const response = await apiBff.post('/admin/inventory', data);
       inventory.value.push(response.data.data);
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al crear ítem de inventario';
+      error.value = err.response?.data?.error || 'Error al crear item de inventario';
       return false;
     }
   };
@@ -291,14 +291,14 @@ export const useAdminStore = defineStore('admin', () => {
   const updateInventoryItem = async (inventoryId: string, data: any) => {
     error.value = null;
     try {
-      const response = await apiClient.put(`/inventory/${inventoryId}`, data);
+      const response = await apiBff.put(`/admin/inventory/${inventoryId}`, data);
       const index = inventory.value.findIndex(
         (i: any) => i.inventoryId === inventoryId || i.inventory_id === inventoryId
       );
       if (index !== -1) inventory.value[index] = response.data.data;
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al actualizar ítem de inventario';
+      error.value = err.response?.data?.error || 'Error al actualizar item de inventario';
       return false;
     }
   };
@@ -306,13 +306,13 @@ export const useAdminStore = defineStore('admin', () => {
   const deleteInventoryItem = async (inventoryId: string) => {
     error.value = null;
     try {
-      await apiClient.delete(`/inventory/${inventoryId}`);
+      await apiBff.delete(`/admin/inventory/${inventoryId}`);
       inventory.value = inventory.value.filter(
         (i: any) => i.inventoryId !== inventoryId && i.inventory_id !== inventoryId
       );
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al eliminar ítem de inventario';
+      error.value = err.response?.data?.error || 'Error al eliminar item de inventario';
       return false;
     }
   };

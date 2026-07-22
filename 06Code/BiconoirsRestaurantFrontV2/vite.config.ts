@@ -12,6 +12,12 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true
+      },
+      '/bff': {
+        target: 'https://biconoirs-bussiness.duckdns.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/bff/, ''),
+        secure: false
       }
     }
   },

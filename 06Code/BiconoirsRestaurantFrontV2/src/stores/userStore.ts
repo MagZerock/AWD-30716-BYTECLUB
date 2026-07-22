@@ -1,8 +1,6 @@
-// src/stores/userStore.ts
-
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import apiClient from '../utils/api';
+import { apiBff, apiOps } from '../utils/api';
 import { User } from '@/types/index';
 
 export const useUserStore = defineStore('user', () => {
@@ -18,17 +16,20 @@ export const useUserStore = defineStore('user', () => {
     token.value = newToken;
     if (newToken) {
       localStorage.setItem('auth_token', newToken);
-      apiClient.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      apiBff.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      apiOps.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     } else {
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user_id');
-      delete apiClient.defaults.headers.common['Authorization'];
+      delete apiBff.defaults.headers.common['Authorization'];
+      delete apiOps.defaults.headers.common['Authorization'];
     }
   };
 
   const saveUserId = (id: string) => {
     localStorage.setItem('user_id', id);
-    apiClient.defaults.headers.common['x-user-id'] = id;
+    apiBff.defaults.headers.common['x-user-id'] = id;
+    apiOps.defaults.headers.common['x-user-id'] = id;
   };
 
   const mapUserFromApi = (apiUser: any): User => ({
@@ -45,17 +46,19 @@ export const useUserStore = defineStore('user', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.post('/auth/login', {
+      const response = await apiBff.post('/auth/login', {
         email,
         password
       });
-      const { accessToken, user: userData } = response.data.data;
+      const payload = response.data.data ?? response.data;
+      const accessToken = payload.token;
+      const userData = payload.user;
       setToken(accessToken);
       user.value = mapUserFromApi(userData);
       saveUserId(userData.userId ?? userData.user_id);
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al iniciar sesión';
+      error.value = err.response?.data?.error || 'Error al iniciar sesion';
       return false;
     } finally {
       isLoading.value = false;
@@ -71,13 +74,15 @@ export const useUserStore = defineStore('user', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.post('/auth/register', {
+      const response = await apiBff.post('/auth/signup', {
         name,
         email,
-        passwordHash: password,
+        password,
         phone
       });
-      const { accessToken, user: userData } = response.data.data;
+      const payload = response.data.data ?? response.data;
+      const accessToken = payload.token;
+      const userData = payload.user;
       setToken(accessToken);
       user.value = mapUserFromApi(userData);
       saveUserId(userData.userId ?? userData.user_id);
@@ -90,7 +95,12 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await apiBff.post('/auth/logout');
+    } catch {
+      // session already invalid
+    }
     user.value = null;
     setToken(null);
   };
@@ -99,8 +109,8 @@ export const useUserStore = defineStore('user', () => {
     if (!token.value) return;
     isLoading.value = true;
     try {
-      const response = await apiClient.get('/auth/me');
-      user.value = mapUserFromApi(response.data.data);
+      const response = await apiOps.get('/auth/me');
+      user.value = mapUserFromApi(response.data);
     } catch (err) {
       logout();
     } finally {
@@ -108,9 +118,9 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
-  // Initialize with stored token
   if (token.value) {
-    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+    apiBff.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+    apiOps.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
     getCurrentUser();
   }
 

@@ -2,7 +2,7 @@
 
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import apiClient from '../utils/api';
+import { apiBff } from '../utils/api';
 import { useUserStore } from './userStore';
 import { Dish } from '@/types/index';
 
@@ -95,7 +95,7 @@ export const useCartStore = defineStore('cart', () => {
       const userStore = useUserStore();
       const userId = userStore.user?.user_id;
 
-      const response = await apiClient.post('/orders', {
+      const response = await apiBff.post('/checkout', {
         orderId: crypto.randomUUID(),
         userId: userId,
         totalAmount: totalPrice.value,

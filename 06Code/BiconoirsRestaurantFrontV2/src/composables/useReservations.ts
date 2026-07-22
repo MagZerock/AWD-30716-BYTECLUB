@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import apiClient from '../utils/api';
+import { apiBff } from '../utils/api';
 
 export const useReservations = () => {
   const reservations = ref<any[]>([]);
@@ -21,7 +21,7 @@ export const useReservations = () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.get('/reservations');
+      const response = await apiBff.get('/reservations');
       reservations.value = (response.data.data ?? []).map(mapReservation);
     } catch (err: any) {
       error.value = err.response?.data?.error || 'Error al cargar reservas';
@@ -39,7 +39,7 @@ export const useReservations = () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const response = await apiClient.post('/reservations', {
+      const response = await apiBff.post('/reservations', {
         reservation_date: date,
         reservation_time: time,
         party_size,
@@ -57,7 +57,7 @@ export const useReservations = () => {
 
   const cancelReservation = async (id: string) => {
     try {
-      const response = await apiClient.delete(`/reservations/${id}`);
+      const response = await apiBff.delete(`/reservations/${id}`);
       const idx = reservations.value.findIndex(
         (r) => r.reservation_id === id
       );
