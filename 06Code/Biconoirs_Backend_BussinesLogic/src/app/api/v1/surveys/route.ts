@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     await authenticate(request);
 
     const surveys = await prisma.survey.findMany({
-      include: { user: true },
+      include: { responses: { include: { user: true } } },
       orderBy: { createdAt: "desc" },
     });
 
