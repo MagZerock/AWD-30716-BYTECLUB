@@ -51,7 +51,8 @@
       <div class="container footer-content">
         <div class="footer-section">
           <h4>Contacto</h4>
-          <p>Dirección ficticia · Tel: 000-000-000</p>
+          <p>Av. República de El Salvador N34-102, Quito</p>
+          <p>Tel: +593 988344885</p>
         </div>
         <div class="footer-section">
           <h4>Enlaces</h4>
@@ -59,7 +60,8 @@
         </div>
         <div class="footer-section">
           <h4>Síguenos</h4>
-          <p>Redes sociales ficticias</p>
+          <p><a href="https://facebook.com/biconoirs" target="_blank" rel="noopener">Facebook</a></p>
+          <p><a href="https://instagram.com/biconoirs" target="_blank" rel="noopener">Instagram</a></p>
         </div>
       </div>
     </footer>

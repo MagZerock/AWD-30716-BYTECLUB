@@ -37,7 +37,7 @@
       <section class="about-section">
         <h2>Contacto</h2>
         <div class="contact-info">
-          <p><strong>Teléfono:</strong> +593 2 512-3456</p>
+          <p><strong>Teléfono:</strong> +593 988344885</p>
           <p><strong>Email:</strong> info@bicoinoirgourmet.com</p>
           <p><strong>Dirección:</strong> Av. República de El Salvador N34-102, Quito, Ecuador</p>
           <p><strong>Horario:</strong> Lunes a Domingo, 12:00 PM - 11:00 PM</p>
