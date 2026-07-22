@@ -1,6 +1,6 @@
 import { ApiError } from "./api-error";
 
-const LAYER_A_BASE = process.env.LAYER_A_URL || "http://3.20.57.154:3000/ops";
+const LAYER_A_BASE = process.env.LAYER_A_URL || "https://biconoirs-class-op.duckdns.org/ops";
 
 interface FetchOptions extends RequestInit {
   params?: Record<string, string | undefined>;
