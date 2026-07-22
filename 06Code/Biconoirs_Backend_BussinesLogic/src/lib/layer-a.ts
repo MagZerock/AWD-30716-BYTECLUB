@@ -1,3 +1,5 @@
+import { ApiError } from "./api-error";
+
 const LAYER_A_BASE = process.env.LAYER_A_URL || "http://3.20.57.154:3000/ops";
 
 interface FetchOptions extends RequestInit {
@@ -27,7 +29,12 @@ async function layerAFetch<T>(path: string, options: FetchOptions = {}): Promise
 
   if (!res.ok) {
     const errorBody = await res.text();
-    throw new Error(`Layer A error ${res.status}: ${errorBody}`);
+    let message = `Error ${res.status}`;
+    try {
+      const parsed = JSON.parse(errorBody);
+      message = parsed.message || message;
+    } catch {}
+    throw new ApiError(res.status, message);
   }
 
   const text = await res.text();
