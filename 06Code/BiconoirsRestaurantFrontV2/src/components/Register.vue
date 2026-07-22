@@ -76,15 +76,22 @@
       <div class="login-link">
         ¿Ya tienes cuenta? <router-link to="/login">Inicia sesión aquí</router-link>
       </div>
+
+      <div class="divider">
+        <span>o</span>
+      </div>
+
+      <div id="google-signup-btn" class="google-btn-container"></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../stores/userStore';
 import { useToast } from '../composables/useToast';
+import { useGoogleAuth } from '../composables/useGoogleAuth';
 import { validateEmail, validatePassword, validatePhone } from '../utils/validators';
 
 const name = ref('');
@@ -95,6 +102,27 @@ const confirmPassword = ref('');
 const userStore = useUserStore();
 const router = useRouter();
 const toast = useToast();
+
+const { isReady, renderButton } = useGoogleAuth(async (credential) => {
+  const success = await userStore.loginWithGoogle(credential);
+  if (success) {
+    toast.success('Cuenta creada con Google exitosamente');
+    router.push('/');
+  } else if (userStore.error) {
+    toast.error(userStore.error);
+    userStore.error = null;
+  }
+});
+
+onMounted(() => {
+  const interval = setInterval(() => {
+    const el = document.getElementById('google-signup-btn');
+    if (isReady.value && el) {
+      renderButton(el);
+      clearInterval(interval);
+    }
+  }, 100);
+});
 
 const passwordError = computed(() => {
   if (password.value && confirmPassword.value && password.value !== confirmPassword.value) {

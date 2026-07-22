@@ -11,7 +11,7 @@ model User {
   name                 String
   email                String          @unique
   phone                String?
-  passwordHash         String          @map("password_hash")
+  passwordHash         String?         @map("password_hash")
   role                 String          @default("customer")
   preferences          Json            @default("{}")
   passwordResetToken   String?         @map("password_reset_token")

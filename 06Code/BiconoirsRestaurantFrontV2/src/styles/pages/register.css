@@ -96,6 +96,35 @@
 	text-decoration: underline;
 }
 
+.divider {
+	display: flex;
+	align-items: center;
+	margin: 1.5rem 0;
+	text-align: center;
+}
+
+.divider::before,
+.divider::after {
+	content: "";
+	flex: 1;
+	border-bottom: 1px solid var(--border-strong);
+}
+
+.divider span {
+	padding: 0 1rem;
+	color: var(--text-secondary);
+	font-size: 0.85rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.google-btn-container {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
 @media (max-width: 768px) {
 	.register-container {
 		padding: 1.5rem 1rem;

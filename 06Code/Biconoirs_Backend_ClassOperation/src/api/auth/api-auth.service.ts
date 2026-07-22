@@ -77,7 +77,7 @@ export class ApiAuthService {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (!user || !comparePasswords(dto.password, user.passwordHash)) {
+    if (!user || !user.passwordHash || !comparePasswords(dto.password, user.passwordHash)) {
       throw new UnauthorizedException({
         message: "Invalid credentials",
         data: null,
