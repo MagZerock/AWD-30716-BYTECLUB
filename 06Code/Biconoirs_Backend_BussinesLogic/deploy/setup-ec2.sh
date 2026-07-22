@@ -5,13 +5,13 @@ DOMAIN="${1:-biconoirs-bussiness.duckdns.org}"
 APP_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "=== Installing system dependencies ==="
-sudo apt update
-sudo apt install -y nginx certbot python3-certbot-nginx
+sudo dnf update -y
+sudo dnf install -y nginx certbot python3-certbot-nginx
 
 echo "=== Installing Node.js 22 ==="
 if ! command -v node &> /dev/null; then
-  curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
-  sudo apt install -y nodejs
+  curl -fsSL https://rpm.nodesource.com/setup_22.x | sudo bash -
+  sudo dnf install -y nodejs
 fi
 
 echo "=== Installing project dependencies ==="
@@ -34,48 +34,37 @@ pm2 delete biconoirs-bff 2>/dev/null || true
 pm2 start npm --name "biconoirs-bff" -- start -- -p 3001
 pm2 save
 
-echo "=== Configuring Nginx ==="
-sudo mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
+echo "=== Configuring Initial Nginx (HTTP only for Certbot) ==="
+# En Amazon Linux las configuraciones van en /etc/nginx/conf.d/
+sudo rm -f /etc/nginx/conf.d/*.conf
 
-cat <<'NGINX' | sudo tee /etc/nginx/sites-available/biconoirs-bff > /dev/null
+cat <<NGINX | sudo tee /etc/nginx/conf.d/biconoirs-bff.conf > /dev/null
 server {
     listen 80;
-    server_name DOMAIN_PLACEHOLDER;
-    return 301 https://$server_name$request_uri;
-}
-
-server {
-    listen 443 ssl http2;
-    server_name DOMAIN_PLACEHOLDER;
-
-    ssl_certificate /etc/letsencrypt/live/DOMAIN_PLACEHOLDER/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/DOMAIN_PLACEHOLDER/privkey.pem;
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers HIGH:!aNULL:!MD5;
+    server_name $DOMAIN;
 
     location / {
         proxy_pass http://127.0.0.1:3001;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_cache_bypass \$http_upgrade;
         proxy_read_timeout 60s;
         proxy_send_timeout 60s;
     }
 }
 NGINX
 
-sudo sed -i "s/DOMAIN_PLACEHOLDER/$DOMAIN/g" /etc/nginx/sites-available/biconoirs-bff
-sudo ln -sf /etc/nginx/sites-available/biconoirs-bff /etc/nginx/sites-enabled/
 sudo nginx -t
-sudo systemctl reload nginx
+sudo systemctl enable nginx
+sudo systemctl restart nginx
 
-echo "=== SSL with Let's Encrypt ==="
-sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m admin@"$DOMAIN"
+echo "=== Requesting SSL Certificate with Certbot ==="
+sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m "admin@$DOMAIN" --redirect
 
 echo ""
 echo "=== DONE ==="
