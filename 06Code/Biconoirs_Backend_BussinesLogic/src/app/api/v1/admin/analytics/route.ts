@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
         })
       : [];
 
-    const dishMap = new Map(dishes.map((d) => [d.itemId, d.name]));
+    const dishMap = new Map(dishes.map((d: { itemId: string; name: string }) => [d.itemId, d.name]));
 
     const topSellingDishes = topDishes.map((d: (typeof topDishes)[number]) => ({
       item_id: d.itemId,
