@@ -42,7 +42,7 @@ function createClient(baseURL: string): AxiosInstance {
       return response;
     },
     (error) => {
-      if (error.response?.status === 401) {
+      if (error.response?.status === 401 && error.config?.headers?.Authorization) {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user_id');
         window.location.href = '/login';
