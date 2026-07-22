@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
 
     const surveys = await prisma.survey.findMany({
       include: { responses: { include: { user: true } } },
-      orderBy: { createdAt: "desc" },
     });
 
     return NextResponse.json(surveys);
