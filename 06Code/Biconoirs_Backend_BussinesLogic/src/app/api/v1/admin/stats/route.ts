@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { errorResponse } from "@/lib/api-error";
+import { serialize } from "@/lib/serialize";
 
 export async function GET(_request: NextRequest) {
   try {
@@ -15,12 +16,12 @@ export async function GET(_request: NextRequest) {
         prisma.order.count(),
       ]);
 
-    return NextResponse.json({
+    return NextResponse.json(serialize({
       totalOrders,
       totalRevenue: Number(revenueAgg._sum.totalAmount ?? 0),
       pendingOrders: pendingCount,
       totalCustomers,
-    });
+    }));
   } catch (error) {
     return errorResponse(error, "Failed to fetch stats");
   }

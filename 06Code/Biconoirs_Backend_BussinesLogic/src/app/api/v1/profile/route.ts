@@ -3,6 +3,7 @@ import { layerA } from "@/lib/layer-a";
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/auth";
 import { errorResponse } from "@/lib/api-error";
+import { serialize } from "@/lib/serialize";
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,11 +28,11 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({
+    return NextResponse.json(serialize({
       ...identity,
       phone: user?.phone ?? null,
       preferences: user?.preferences ?? {},
-    });
+    }));
   } catch (error) {
     return errorResponse(error, "Failed to fetch profile");
   }
@@ -44,7 +45,7 @@ export async function PUT(request: NextRequest) {
 
     const result = await layerA.put(`/customers/${userId}`, body);
 
-    return NextResponse.json(result);
+    return NextResponse.json(serialize(result));
   } catch (error) {
     return errorResponse(error, "Failed to update profile");
   }
@@ -65,7 +66,7 @@ export async function PATCH(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ preferences: user.preferences });
+    return NextResponse.json(serialize({ preferences: user.preferences }));
   } catch (error) {
     return errorResponse(error, "Failed to update preferences");
   }

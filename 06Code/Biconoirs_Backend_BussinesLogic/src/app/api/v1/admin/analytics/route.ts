@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateAdmin } from "@/lib/auth";
 import { errorResponse } from "@/lib/api-error";
+import { serialize } from "@/lib/serialize";
 
 export async function GET(request: NextRequest) {
   try {
@@ -59,12 +60,12 @@ export async function GET(request: NextRequest) {
       orderCounts.map((o) => [o.status, o._count.orderId]),
     );
 
-    return NextResponse.json({
+    return NextResponse.json(serialize({
       total_revenue: totalRevenue,
       top_selling_dishes: topSellingDishes,
       orders_by_status: ordersByStatus,
       total_orders: orderCounts.reduce((sum, o) => sum + o._count.orderId, 0),
-    });
+    }));
   } catch (error) {
     return errorResponse(error, "Failed to fetch analytics");
   }

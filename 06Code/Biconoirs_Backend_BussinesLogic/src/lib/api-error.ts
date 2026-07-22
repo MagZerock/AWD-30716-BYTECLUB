@@ -19,7 +19,7 @@ export function errorResponse(error: unknown, defaultMessage = "Internal server 
     );
   }
 
-  console.error("Unhandled error:", error);
+  console.error("Unhandled error:", error instanceof Error ? error.message : String(error));
 
   return NextResponse.json(
     { error: defaultMessage },
