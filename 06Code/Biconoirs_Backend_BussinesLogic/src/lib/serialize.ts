@@ -1,9 +1,7 @@
 // Ensure BigInt can be serialized to JSON globally
-if (!BigInt.prototype.toJSON) {
-  BigInt.prototype.toJSON = function () {
-    return this.toString();
-  };
-}
+(BigInt.prototype as any).toJSON = function () {
+  return this.toString();
+};
 
 export function serialize<T>(data: T): T {
   return JSON.parse(
