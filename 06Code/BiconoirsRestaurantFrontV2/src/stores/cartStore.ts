@@ -1,5 +1,3 @@
-// src/stores/cartStore.ts
-
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { apiBff } from '../utils/api';

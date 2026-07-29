@@ -1,5 +1,3 @@
-<!-- src/components/Cart.vue -->
-
 <template>
   <div class="cart-container">
     <div class="container">

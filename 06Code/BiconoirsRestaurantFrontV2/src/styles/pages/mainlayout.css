@@ -276,7 +276,6 @@ body {
   gap: 1rem;
 }
 
-/* Hamburger button */
 .hamburger {
   display: none;
   flex-direction: column;

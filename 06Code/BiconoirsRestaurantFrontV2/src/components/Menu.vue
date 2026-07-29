@@ -1,5 +1,3 @@
-<!-- src/components/Menu.vue -->
-
 <template>
   <div class="menu-container">
     <div class="container">

@@ -1,5 +1,3 @@
-<!-- src/components/Register.vue -->
-
 <template>
   <div class="register-container">
     <div class="register-card">
@@ -82,7 +80,7 @@
         @click="userStore.loginWithGoogleSupabase()"
         :disabled="userStore.isLoading"
       >
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Logo de Google" />
         Registrarse con Google
       </button>
 

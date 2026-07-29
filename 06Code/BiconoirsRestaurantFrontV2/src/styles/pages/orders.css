@@ -89,7 +89,6 @@ h1 {
 
 .status.pending {
 	background-color: #f39c12;
-	/* kept amber for pending */
 }
 
 .status.confirmed {

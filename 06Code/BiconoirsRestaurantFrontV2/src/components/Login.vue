@@ -1,5 +1,3 @@
-<!-- src/components/Login.vue -->
-
 <template>
   <div class="login-container">
     <div class="login-card">
@@ -63,7 +61,7 @@
         @click="userStore.loginWithGoogleSupabase()"
         :disabled="userStore.isLoading"
       >
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Logo de Google" />
         Iniciar sesión con Google
       </button>
 

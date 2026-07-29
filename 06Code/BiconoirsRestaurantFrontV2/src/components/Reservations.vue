@@ -1,5 +1,3 @@
-<!-- src/components/Reservations.vue -->
-
 <template>
   <div class="reservations-container">
     <div class="container">
@@ -11,7 +9,6 @@
       </div>
 
       <div v-else class="reservations-content">
-        <!-- Formulario para nueva reserva -->
         <div class="new-reservation">
           <h2>Nueva Reserva</h2>
           <form @submit.prevent="handleCreateReservation">
@@ -67,7 +64,6 @@
           </form>
         </div>
 
-        <!-- Lista de reservas -->
         <div class="reservations-list">
           <h2>Mis Reservas</h2>
 

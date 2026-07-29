@@ -1,5 +1,3 @@
-<!-- src/components/admin/AdminOrders.vue -->
-
 <template>
   <div class="admin-orders">
     <div class="filters">

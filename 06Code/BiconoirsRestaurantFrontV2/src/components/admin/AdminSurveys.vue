@@ -1,5 +1,3 @@
-<!-- src/components/admin/AdminSurveys.vue -->
-
 <template>
   <div class="admin-surveys">
     <button @click="loadSurveys" class="refresh-btn">🔄 Actualizar</button>

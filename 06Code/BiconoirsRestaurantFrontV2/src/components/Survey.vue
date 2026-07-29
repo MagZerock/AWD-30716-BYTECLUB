@@ -1,5 +1,3 @@
-<!-- src/components/Survey.vue -->
-
 <template>
   <div class="survey-container">
     <div class="container">

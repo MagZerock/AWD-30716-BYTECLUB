@@ -1,5 +1,3 @@
-<!-- src/components/Home.vue -->
-
 <template>
   <div class="home-container">
     <section class="hero">
@@ -38,7 +36,6 @@
       </div>
     </section>
 
-    <!-- Features Section -->
     <section class="features">
       <div class="container">
         <div class="feature-grid">
@@ -61,7 +58,6 @@
       </div>
     </section>
 
-    <!-- Call to Action -->
     <section class="cta-section">
       <div class="container">
         <h2>¿Listo para una experiencia única?</h2>
@@ -98,12 +94,10 @@ onMounted(async () => {
     const raw: any[] = res.data.data ?? [];
     featuredDishes.value = raw.map(mapDish).slice(0, 2);
   } catch {
-    // API error — empty stays
   } finally {
     isLoading.value = false;
   }
 });
 </script>
 
-<!-- Import page styles -->
 <style scoped src="@/styles/pages/home.css"></style>

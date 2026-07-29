@@ -1,5 +1,3 @@
-// src/router/index.ts
-
 import { createRouter, createWebHistory } from 'vue-router';
 import { defineAsyncComponent } from 'vue';
 import { useUserStore } from '@stores/userStore';
@@ -91,7 +89,6 @@ const router = createRouter({
   routes
 });
 
-// Route guards
 router.beforeEach((to, _from, next) => {
   const userStore = useUserStore();
 

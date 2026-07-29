@@ -1,5 +1,3 @@
-// src/utils/formatters.ts
-
 export const formatPrice = (price: number | string): string => {
   return new Intl.NumberFormat('es-CO', {
     style: 'currency',

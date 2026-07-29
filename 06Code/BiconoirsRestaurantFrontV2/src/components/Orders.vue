@@ -1,5 +1,3 @@
-<!-- src/components/Orders.vue -->
-
 <template>
   <div class="orders-container">
     <div class="container">

@@ -283,7 +283,7 @@ export const useAdminStore = defineStore('admin', () => {
       inventory.value.push(response.data.data);
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al crear item de inventario';
+      error.value = err.response?.data?.error || 'Error al crear artículo de inventario';
       return false;
     }
   };
@@ -298,7 +298,7 @@ export const useAdminStore = defineStore('admin', () => {
       if (index !== -1) inventory.value[index] = response.data.data;
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al actualizar item de inventario';
+      error.value = err.response?.data?.error || 'Error al actualizar artículo de inventario';
       return false;
     }
   };
@@ -312,7 +312,7 @@ export const useAdminStore = defineStore('admin', () => {
       );
       return true;
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Error al eliminar item de inventario';
+      error.value = err.response?.data?.error || 'Error al eliminar artículo de inventario';
       return false;
     }
   };

@@ -44,9 +44,9 @@ export function generateDashboardPdf(
   doc.rect(0, 0, pageWidth, 35, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(22)
-  doc.text('Biconoirs Restaurant', pageWidth / 2, 18, { align: 'center' })
+  doc.text('Biconoirs Restaurante', pageWidth / 2, 18, { align: 'center' })
   doc.setFontSize(12)
-  doc.text('Reporte del Dashboard', pageWidth / 2, 28, { align: 'center' })
+  doc.text('Reporte de Administración', pageWidth / 2, 28, { align: 'center' })
 
   const now = new Date()
   const dateStr = now.toLocaleDateString('es-CO', {
@@ -94,11 +94,11 @@ export function generateDashboardPdf(
     y += 6
 
     const orderRows = orders.slice(0, 20).map((o) => [
-      o.order_id?.slice(0, 8) ?? 'N/A',
-      o.customer?.name ?? o.customer?.email ?? 'N/A',
+      o.order_id?.slice(0, 8) ?? 'N/D',
+      o.customer?.name ?? o.customer?.email ?? 'N/D',
       `$${(o.total_amount ?? 0).toLocaleString('es-CO')}`,
-      o.status ?? 'N/A',
-      o.created_at ? new Date(o.created_at).toLocaleDateString('es-CO') : o.order_date ? new Date(o.order_date).toLocaleDateString('es-CO') : 'N/A',
+      o.status ?? 'N/D',
+      o.created_at ? new Date(o.created_at).toLocaleDateString('es-CO') : o.order_date ? new Date(o.order_date).toLocaleDateString('es-CO') : 'N/D',
     ])
 
     autoTable(doc, {
@@ -123,7 +123,7 @@ export function generateDashboardPdf(
     y += 6
 
     const stockRows = lowStockItems.map((item: any) => [
-      item.name ?? item.ingredient_name ?? item.product_name ?? 'N/A',
+      item.name ?? item.ingredient_name ?? item.product_name ?? 'N/D',
       String(item.current_stock ?? item.quantity ?? 0),
       String(item.min_stock ?? 5),
       item.unit ?? '',
@@ -148,12 +148,12 @@ export function generateDashboardPdf(
 
     const toDate = (d: string | undefined) => d ? new Date(d).toLocaleDateString('es-CO') : ''
     const resRows = reservations.slice(0, 20).map((r) => [
-      r.reservation_id?.slice(0, 8) ?? 'N/A',
-      r.customer?.name ?? r.customer?.email ?? 'N/A',
+      r.reservation_id?.slice(0, 8) ?? 'N/D',
+      r.customer?.name ?? r.customer?.email ?? 'N/D',
       r.reservation_date ? new Date(r.reservation_date).toLocaleDateString('es-CO') : toDate(r.created_at),
       r.reservation_time ?? '',
       String(r.party_size ?? 0),
-      r.status ?? 'N/A',
+      r.status ?? 'N/D',
     ])
 
     autoTable(doc, {
@@ -169,7 +169,7 @@ export function generateDashboardPdf(
   y = doc.internal.pageSize.getHeight() - 20
   doc.setTextColor(...grayColor)
   doc.setFontSize(8)
-  doc.text('Biconoirs Restaurant - Reporte generado automaticamente', pageWidth / 2, y, { align: 'center' })
+  doc.text('Biconoirs Restaurante - Reporte generado automáticamente', pageWidth / 2, y, { align: 'center' })
 
   doc.save('reporte-dashboard-biconoirs.pdf')
 }

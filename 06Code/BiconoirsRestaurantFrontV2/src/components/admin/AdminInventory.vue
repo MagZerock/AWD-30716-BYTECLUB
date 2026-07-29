@@ -1,7 +1,7 @@
 <template>
   <div class="admin-inventory">
     <div class="toolbar">
-      <button @click="openCreateModal" class="btn btn-primary">+ Nuevo Item</button>
+      <button @click="openCreateModal" class="btn btn-primary">+ Nuevo Artículo</button>
       <button @click="loadData" class="btn btn-outline">🔄 Actualizar</button>
     </div>
 
@@ -36,12 +36,12 @@
         </tr>
       </tbody>
     </table>
-    <div v-else class="empty">No hay items en inventario</div>
+    <div v-else class="empty">No hay artículos en inventario</div>
 
     <!-- Modal -->
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal">
-        <h2>{{ editingItem ? 'Editar Item' : 'Nuevo Item de Inventario' }}</h2>
+        <h2>{{ editingItem ? 'Editar Artículo' : 'Nuevo Artículo de Inventario' }}</h2>
         <form @submit.prevent="saveItem">
           <div class="form-grid">
             <div class="field">
@@ -87,7 +87,7 @@
     <div v-if="deleteTarget" class="modal-overlay" @click.self="deleteTarget = null">
       <div class="modal modal-sm">
         <h2>Confirmar eliminación</h2>
-        <p>¿Eliminar item de <strong>{{ deleteTarget.ingredient?.name || deleteTarget.name }}</strong>?</p>
+        <p>¿Eliminar artículo de <strong>{{ deleteTarget.ingredient?.name || deleteTarget.name }}</strong>?</p>
         <div class="modal-actions">
           <button @click="deleteItem" class="btn btn-danger" :disabled="saving">
             {{ saving ? 'Eliminando...' : 'Eliminar' }}
@@ -125,7 +125,7 @@ const stockStatus = (item: any) => {
   const min = Number(item.reorderLevel ?? item.reorder_level ?? 0);
   if (stock <= 0) return { class: 'badge badge-red', label: 'Sin stock' };
   if (stock <= min) return { class: 'badge badge-yellow', label: 'Stock bajo' };
-  return { class: 'badge badge-green', label: 'OK' };
+  return { class: 'badge badge-green', label: 'Bien' };
 };
 
 const loadData = async () => {
@@ -171,7 +171,7 @@ const saveItem = async () => {
   }
   saving.value = false;
   if (ok) {
-    toast.success(editingItem.value ? 'Item actualizado' : 'Item creado');
+    toast.success(editingItem.value ? 'Artículo actualizado' : 'Artículo creado');
     items.value = [...adminStore.inventory];
     closeModal();
   } else {
@@ -186,7 +186,7 @@ const deleteItem = async () => {
   const ok = await adminStore.deleteInventoryItem(deleteTarget.value.inventoryId || deleteTarget.value.inventory_id);
   saving.value = false;
   if (ok) {
-    toast.success('Item eliminado');
+    toast.success('Artículo eliminado');
     items.value = [...adminStore.inventory];
     deleteTarget.value = null;
   } else {

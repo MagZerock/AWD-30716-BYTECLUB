@@ -1,5 +1,3 @@
-<!-- src/components/admin/Dashboard.vue -->
-
 <template>
   <div class="dashboard-container">
     <div class="container">

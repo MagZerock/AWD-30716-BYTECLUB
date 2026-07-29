@@ -1,5 +1,3 @@
-<!-- src/components/About.vue -->
-
 <template>
   <div class="about-container">
     <div class="container">
