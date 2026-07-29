@@ -43,10 +43,10 @@ onMounted(async () => {
     picture: meta?.avatar_url || meta?.picture || null,
   }
 
-  userStore.setSupabaseSession(googleUser)
+  const mode = await userStore.linkGoogleOAuth(googleUser)
 
   message.value = 'Inicio de sesión exitoso'
-  toast.success('Inicio de sesión con Google exitoso')
+  toast.success(mode === 'bff' ? 'Inicio de sesión con Google exitoso' : 'Inicio de sesión con Google exitoso (acceso limitado)')
   setTimeout(() => router.push('/'), 1000)
 })
 </script>

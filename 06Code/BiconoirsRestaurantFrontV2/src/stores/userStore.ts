@@ -120,6 +120,38 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const linkGoogleOAuth = async (googleUser: { name: string; email: string; picture: string | null }): Promise<'bff' | 'local'> => {
+    const pwd = 'google_oauth_' + googleUser.email
+    try {
+      const res = await apiBff.post('/auth/signup', { name: googleUser.name, email: googleUser.email, passwordHash: pwd })
+      const payload = res.data.data ?? res.data
+      setToken(payload.token)
+      user.value = { ...mapUserFromApi(payload.user), picture: googleUser.picture || payload.user?.picture }
+      saveUserId(payload.user.userId ?? payload.user.user_id)
+      if (googleUser.picture) {
+        localStorage.setItem('user_picture', googleUser.picture)
+        picture.value = googleUser.picture
+      }
+      return 'bff'
+    } catch {
+      try {
+        const res = await apiBff.post('/auth/login', { email: googleUser.email, password: pwd })
+        const payload = res.data.data ?? res.data
+        setToken(payload.token)
+        user.value = { ...mapUserFromApi(payload.user), picture: googleUser.picture || payload.user?.picture }
+        saveUserId(payload.user.userId ?? payload.user.user_id)
+        if (googleUser.picture) {
+          localStorage.setItem('user_picture', googleUser.picture)
+          picture.value = googleUser.picture
+        }
+        return 'bff'
+      } catch {
+        setSupabaseSession(googleUser)
+        return 'local'
+      }
+    }
+  }
+
   const loginWithGoogleSupabase = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -176,6 +208,7 @@ export const useUserStore = defineStore('user', () => {
     logout,
     getCurrentUser,
     setSupabaseSession,
+    linkGoogleOAuth,
     loginWithGoogleSupabase,
   };
 });
