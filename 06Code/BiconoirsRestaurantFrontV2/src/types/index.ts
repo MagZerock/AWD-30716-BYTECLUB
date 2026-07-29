@@ -9,6 +9,7 @@ export interface User {
   phone?: string;
   password_hash?: string;
   role: UserRole;
+  picture?: string | null;
   created_at: Date;
   updated_at: Date;
 }

@@ -7,6 +7,7 @@ import MainLayout from '@components/layouts/MainLayout.vue';
 import Home from '@components/Home.vue';
 import Login from '@components/Login.vue';
 import Register from '@components/Register.vue';
+import AuthCallback from '@components/AuthCallback.vue';
 import Menu from '@components/Menu.vue';
 import Cart from '@components/Cart.vue';
 import Orders from '@components/Orders.vue';
@@ -37,6 +38,11 @@ const routes = [
         path: 'register',
         component: Register,
         name: 'Register'
+      },
+      {
+        path: 'auth/callback',
+        component: AuthCallback,
+        name: 'AuthCallback'
       },
       {
         path: 'menu',

@@ -73,6 +73,19 @@
         </button>
       </form>
 
+      <div class="divider">
+        <span>o</span>
+      </div>
+
+      <button
+        class="google-btn"
+        @click="userStore.loginWithGoogleSupabase()"
+        :disabled="userStore.isLoading"
+      >
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+        Registrarse con Google
+      </button>
+
       <div class="login-link">
         ¿Ya tienes cuenta? <router-link to="/login">Inicia sesión aquí</router-link>
       </div>

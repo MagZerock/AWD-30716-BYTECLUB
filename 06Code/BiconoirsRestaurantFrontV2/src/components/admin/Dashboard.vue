@@ -3,7 +3,12 @@
 <template>
   <div class="dashboard-container">
     <div class="container">
-      <h1>Panel de Administración</h1>
+      <div class="header-row">
+        <h1>Panel de Administración</h1>
+        <button class="pdf-btn" @click="downloadReport" :disabled="pdfLoading">
+          {{ pdfLoading ? 'Generando...' : 'Descargar Reporte PDF' }}
+        </button>
+      </div>
 
       <div v-if="!userStore.isAdmin" class="unauthorized">
         <p>No tienes acceso a esta sección</p>
@@ -71,6 +76,7 @@ import { useAdminStore } from '@stores/adminStore';
 import { useUserStore } from '@stores/userStore';
 import { useToast } from '../../composables/useToast';
 import { formatPrice } from '@utils/formatters';
+import { generateDashboardPdf } from '@utils/pdfReport';
 import AdminOrders from './AdminOrders.vue';
 import AdminMenu from './AdminMenu.vue';
 import AdminIngredients from './AdminIngredients.vue';
@@ -83,6 +89,7 @@ const toast = useToast();
 const activeTab = ref('Órdenes');
 const tabs = ['Órdenes', 'Menú', 'Ingredientes', 'Reservas', 'Encuestas'];
 const statsLoading = ref(false);
+const pdfLoading = ref(false);
 
 onMounted(async () => {
   statsLoading.value = true;
@@ -93,6 +100,23 @@ onMounted(async () => {
     adminStore.error = null;
   }
 });
+
+const downloadReport = async () => {
+  pdfLoading.value = true;
+  try {
+    generateDashboardPdf(
+      adminStore.stats ?? { totalOrders: 0, totalRevenue: 0, pendingOrders: 0, totalCustomers: 0 },
+      adminStore.orders,
+      adminStore.reservations,
+      adminStore.inventory,
+    );
+    toast.success('Reporte descargado exitosamente');
+  } catch (err: any) {
+    toast.error('Error al generar el reporte');
+  } finally {
+    pdfLoading.value = false;
+  }
+};
 </script>
 
 <style scoped>
@@ -106,9 +130,42 @@ onMounted(async () => {
   padding: 0 1rem;
 }
 
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-row h1 {
+  margin-bottom: 0;
+}
+
+.pdf-btn {
+  padding: 0.6rem 1.2rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.pdf-btn:hover:not(:disabled) {
+  background-color: #c0392b;
+}
+
+.pdf-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 h1 {
   color: #2c3e50;
-  margin-bottom: 2rem;
 }
 
 .unauthorized {

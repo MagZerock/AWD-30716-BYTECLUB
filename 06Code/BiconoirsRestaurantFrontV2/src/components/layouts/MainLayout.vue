@@ -33,6 +33,7 @@
             </div>
             <div v-else class="user-menu">
               <router-link v-if="userStore.isAdmin" to="/admin/dashboard" class="admin-link" @click="menuOpen = false">Admin</router-link>
+              <img v-if="userStore.picture" :src="userStore.picture" alt="" class="user-avatar" />
               <span class="user-name">{{ userStore.user?.name || 'Usuario' }}</span>
               <button class="logout-btn" @click="userStore.logout(); menuOpen = false">Salir</button>
             </div>

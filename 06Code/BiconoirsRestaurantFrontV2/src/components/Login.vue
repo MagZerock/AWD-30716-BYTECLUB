@@ -3,9 +3,25 @@
 <template>
   <div class="login-container">
     <div class="login-card">
-      <h1>Ingresar</h1>
-      
-      <form @submit.prevent="handleLogin">
+      <h1>{{ userStore.isAuthenticated ? 'Bienvenido' : 'Ingresar' }}</h1>
+
+      <div v-if="userStore.isAuthenticated" class="profile-section">
+        <img
+          v-if="userStore.picture"
+          :src="userStore.picture"
+          alt="Foto de perfil"
+          class="profile-picture"
+        />
+        <div class="profile-info">
+          <p class="profile-name">{{ userStore.user?.name }}</p>
+          <p class="profile-email">{{ userStore.user?.email }}</p>
+        </div>
+        <button class="submit-btn logout-btn" @click="userStore.logout(); router.push('/')">
+          Cerrar sesión
+        </button>
+      </div>
+
+      <form v-else @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="email">Correo Electrónico</label>
           <input
@@ -37,7 +53,21 @@
         </button>
       </form>
 
-      <div class="signup-link">
+      <div v-if="!userStore.isAuthenticated" class="divider">
+        <span>o</span>
+      </div>
+
+      <button
+        v-if="!userStore.isAuthenticated"
+        class="google-btn"
+        @click="userStore.loginWithGoogleSupabase()"
+        :disabled="userStore.isLoading"
+      >
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+        Iniciar sesión con Google
+      </button>
+
+      <div v-if="!userStore.isAuthenticated" class="signup-link">
         ¿No tienes cuenta? <router-link to="/register">Regístrate aquí</router-link>
       </div>
     </div>

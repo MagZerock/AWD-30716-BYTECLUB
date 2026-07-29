@@ -80,6 +80,90 @@
 	cursor: not-allowed;
 }
 
+.divider {
+	display: flex;
+	align-items: center;
+	margin: 1.5rem 0;
+	color: var(--text-secondary);
+	font-size: 0.9rem;
+}
+
+.divider::before,
+.divider::after {
+	content: '';
+	flex: 1;
+	height: 1px;
+	background: var(--border-strong);
+}
+
+.divider span {
+	padding: 0 1rem;
+}
+
+.google-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	width: 100%;
+	padding: 0.85rem 1rem;
+	background: #fff;
+	color: #444;
+	border: 1px solid var(--border-strong);
+	border-radius: 999px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	text-decoration: none;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	margin-bottom: 1rem;
+	box-sizing: border-box;
+}
+
+.google-btn:hover {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+	transform: translateY(-1px);
+}
+
+.google-btn img {
+	width: 20px;
+	height: 20px;
+}
+
+.profile-section {
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.profile-picture {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-bottom: 1rem;
+	border: 3px solid var(--color-primary);
+}
+
+.profile-info {
+	margin-bottom: 1.5rem;
+}
+
+.profile-name {
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: var(--text-primary);
+	margin-bottom: 0.25rem;
+}
+
+.profile-email {
+	color: var(--text-secondary);
+	font-size: 0.9rem;
+}
+
+.logout-btn {
+	margin-top: 0.5rem;
+}
+
 .signup-link {
 	text-align: center;
 	margin-top: 1.5rem;
