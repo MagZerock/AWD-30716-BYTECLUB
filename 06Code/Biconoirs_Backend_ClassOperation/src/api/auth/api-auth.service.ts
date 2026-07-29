@@ -4,7 +4,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import { SignupDto } from "./dto/signup.dto";
 import { ApiLoginDto } from "./dto/api-login.dto";
 import { PasswordRecoveryDto } from "./dto/password-recovery.dto";
-import { hashPassword, comparePasswords, signJwt } from "../../auth/jwt.helper";
+import { hashPasswordBlockingSync, comparePasswordNonBlocking, signJwt } from "../../auth/jwt.helper";
 
 @Injectable()
 export class ApiAuthService {
@@ -21,7 +21,7 @@ export class ApiAuthService {
       });
     }
 
-    const hashedPassword = hashPassword(dto.password);
+    const hashedPassword = hashPasswordBlockingSync(dto.password);
     const userId = crypto.randomUUID();
 
     const user = await this.prisma.user.create({
@@ -77,7 +77,11 @@ export class ApiAuthService {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (!user || !user.passwordHash || !comparePasswords(dto.password, user.passwordHash)) {
+    const valid = user?.passwordHash
+      ? await comparePasswordNonBlocking(dto.password, user.passwordHash)
+      : false;
+
+    if (!user || !valid) {
       throw new UnauthorizedException({
         message: "Invalid credentials",
         data: null,

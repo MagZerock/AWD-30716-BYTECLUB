@@ -6,7 +6,7 @@ import { LoginDto } from "./dto/login.dto";
 import { RefreshDto } from "./dto/refresh.dto";
 import { ForgotPasswordDto } from "./dto/forgot-password.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
-import { hashPassword, comparePasswords, signJwt } from "./jwt.helper";
+import { hashPasswordBlockingSync, comparePasswordNonBlocking, signJwt } from "./jwt.helper";
 
 @Injectable()
 export class AuthService {
@@ -23,7 +23,7 @@ export class AuthService {
       });
     }
 
-    const hashedPassword = hashPassword(dto.passwordHash);
+    const hashedPassword = hashPasswordBlockingSync(dto.passwordHash);
     const userId = crypto.randomUUID();
 
     const user = await this.prisma.user.create({
@@ -76,14 +76,13 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
-    if (!user || !user.passwordHash || !comparePasswords(dto.password, user.passwordHash)) {
-      throw new UnauthorizedException({
-        message: "Invalid credentials",
-        data: null,
-      });
+    const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const valid = user?.passwordHash
+      ? await comparePasswordNonBlocking(dto.password, user.passwordHash)
+      : false;
+
+    if (!user || !valid) {
+      throw new UnauthorizedException({ message: "Invalid credentials", data: null });
     }
 
     // Create session
@@ -253,7 +252,7 @@ export class AuthService {
       });
     }
 
-    const hashedPassword = hashPassword(dto.newPassword);
+    const hashedPassword = hashPasswordBlockingSync(dto.newPassword);
 
     const updatedUser = await this.prisma.user.update({
       where: { userId: user.userId },
